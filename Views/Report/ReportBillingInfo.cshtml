@@ -1,0 +1,160 @@
+﻿@model ComplaintTracker.Models.ModelPaymentInfo
+@{
+    ViewBag.Title = "ReportComplaintAnalysis";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        //// Datatables with Buttons
+        //var datatablesButtons = $("#datatables-buttons").DataTable({
+        //    responsive: true,
+        //    lengthChange: !1,
+        //    //buttons: ["copy", 'csv', 'print'],
+        //    buttons: null,
+
+        //});
+        //datatablesButtons.buttons().container().appendTo("#datatables-buttons_wrapper .col-md-6:eq(0)");
+    });
+    $(document).ready(function () {
+
+        if (@ViewBag.cno != '') {
+            $('#consumerno').val('@ViewBag.cno');
+        }
+    });
+
+
+</script>
+@using (Html.BeginForm("GetReportBillingInfo", "Report", FormMethod.Post, new { name = "frm", id = "validation-form" }))
+{
+
+
+<div class="header">
+        <h1 class="header-title">
+            Billing Information
+        </h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="~/Dashboard/Index">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Billing Information</li>
+            </ol>
+        </nav>
+    </div><div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Search By</h5>
+                    <h6 class="card-subtitle text-muted">
+                        Search with
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-12 col-lg-3 error-placeholder">
+                            
+                            
+                            <input id="consumerno" name="consumerno" value="" type="number" placeholder="Consumer No." class="form-control searchtag" />
+                        </div>
+                        <div class="col-12 col-lg-3">
+                            <input type="submit" value="Search" class="btn btn-dark btn-block" id="btnSearch" />
+           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">About Complaint Analysis</h5>
+                    <h6 class="card-subtitle text-muted">
+                        Description of Report
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <h2>Consumer</h2>
+                    <table  class="table table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Address1</th>
+                                <th>Address2</th>
+                                <th>Tariff</th>
+                                <th>Load</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Master != null)
+                            {
+                                <tr>
+                                    <td>@Model.Master.name</td>
+                                    <td>@Model.Master.address1</td>
+                                    <td>@Model.Master.address2</td>
+                                    <td>@Model.Master.tariff</td>
+                                    <td>@Model.Master.load</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <h2>Billing</h2>
+                    <table id="datatables-buttons" class="table table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Bill Date</th>
+                                <th>Unit</th>
+                                <th>Bill Amount</th>
+                                <th>Bill Month</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.billing != null)
+                            {
+                                for (int i = 0; i < Model.billing.billdate.Count; i++)
+                                {
+                                    <tr>
+                                        <td>@Model.billing.billdate[i]</td>
+                                        <td>@Model.billing.unit[i]</td>
+                                        <td>@Model.billing.billamount[i]</td>
+                                        <td>@Model.billing.billmonth[i]</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+
+                    <h2>Payment</h2>
+                    <table class="table table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Paid Date</th>
+                                <th>Paid Amount</th>
+                                <th>Receipt No</th>
+                                <th>Pay Mode</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.payment != null)
+                            {
+                                for (int i = 0; i < Model.payment.paiddate.Count; i++)
+                                {
+                                    <tr>
+                                        <td>@Model.payment.paiddate[i]</td>
+                                        <td>@Model.payment.paidamount[i]</td>
+                                        <td>@Model.payment.receiptno[i]</td>
+                                        <td>@Model.payment.paymode[i]</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+

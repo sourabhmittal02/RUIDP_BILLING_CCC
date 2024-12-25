@@ -1,0 +1,135 @@
+﻿@*Remark Model*@
+@model  IList<ComplaintTracker.Models.COMPLAINT>
+
+@section scripts{
+    <link href="~/Content/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="~/Scripts/select2.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+}
+
+
+<div class="modal fade" id="VillageListPopup" tabindex="-1" aria-hidden="true" style="display: none;" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog mw-100 modal-xl modal-dialog-vertical-center" role="document">
+        <div class="modal-content">
+            <div class="modal-header with-border text-white">
+                <h2 class="modal-title"> Select Office</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="col-8 col-lg-3 m-2 error-placeholder">
+                    <h5 class="card-title">Village</h5>
+
+                    <select id="ddlvillage" name="ddlvillage" class="form-control select2" data-bs-toggle="select2" style="width:250px; height:35px;">
+                    </select>
+                </div>
+
+
+                <div class="col-8 col-lg-3 m-2 error-placeholder">
+                    <h5 class="card-title">Office</h5>
+
+                    <select id="ddloffice" name="ddloffice" class="form-control select2" data-bs-toggle="select2" style="width:250px; height:35px;">
+                    </select>
+
+                </div>
+
+            </div>
+            <div class="modal-footer with-border">
+                <button type="button" class="btn btn-success" id="btnUpdate" onclick="SetData()">Ok</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close" id="btnclose">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $(function () {
+            $('#ddlvillage').select2({
+                placeholder: "",
+                minimumResultsForSearch: -1,
+                selectOnClose: false,
+                width: '450px'
+            });
+            $('#ddloffice').select2({
+                placeholder: "",
+                minimumResultsForSearch: -1,
+                selectOnClose: false,
+                width: '450px'
+            });
+            $('select:not(.normal)').each(function () {
+                $(this).select2({
+                    dropdownParent: $(this).parent()
+                });
+            });
+        });
+        fillVillage();
+    });
+    $('#ddlvillage').change(function () {
+        var villageName = $("#ddlvillage option:selected").text();
+        fillOfficebyVillage(villageName);
+    });
+    function fillVillage() {
+        $("#ddlvillage").empty().trigger('change');
+        $.ajax({
+            type: "GET",
+            url: '/Complaint/GetVillageList',
+            data: null,
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                if (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var opt = new Option(data[i].Name, data[i].Id);
+                        $('#ddlvillage').append(opt);
+                    }
+                    return;
+                } else {
+                    alert('error');
+                }
+            }
+        });
+    }
+    function fillOfficebyVillage(villageName) {
+        $("#ddloffice").empty().trigger('change');
+        $.ajax({
+            type: "GET",
+            url: '/Complaint/GetOfficebyVillage',
+            data: { 'name': villageName },
+            datatype: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                if (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var opt = new Option(data[i].Name, data[i].Id);
+                        $('#ddloffice').append(opt);
+                    }
+                    return;
+                } else {
+                    alert('error');
+                }
+            }
+        });
+    }
+    function SetData() {
+        var villageName = $("#ddlvillage option:selected").text();
+        var officeCode = $("#ddloffice option:selected").val();
+        var villageId = $("#ddlvillage option:selected").val();
+        $("#villageId").val(villageId);
+        //alert(villageId);
+        //alert(officeCode);
+        $('#ADDRESS3').val(villageName);
+        $("#ddlOfficecode > option").each(function () {
+            let result = this.value;
+            if (result == officeCode) {
+                $("#ddlOfficecode").val(this.value).trigger('change');
+            }
+        });
+        $('#btnclose').trigger('click');
+    }
+</script>

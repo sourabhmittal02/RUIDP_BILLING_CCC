@@ -1,0 +1,307 @@
+﻿@model List<ComplaintTracker.Models.ModelBillingPrint>
+
+
+@section scripts{
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+    <style type="text/css">
+        .table-bordered td,
+        .table-bordered th {
+            border: 1px solid black !important;
+            font-size: 8px;
+        }
+
+        .table-header {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .section-title {
+            font-weight: bold;
+            text-align: left;
+            background-color: #f8f9fa;
+        }
+
+        @@media print {
+            .row {
+                display: flex !important; /* Ensure rows use flex layout */
+                flex-wrap: nowrap !important; /* Prevent wrapping */
+            }
+
+            .col {
+                flex: 1 !important; /* Equal widths */
+                max-width: 100% !important; /* Override Bootstrap's column widths */
+            }
+
+            .container1 {
+                width: 150% !important; /* Ensure container spans the full page */
+            }
+        }
+    </style>
+}
+
+
+
+@using (Html.BeginForm("ExportPdf", "Report", FormMethod.Post, new { name = "frm", data_parsley_validate = "" }))
+{
+    <div class="modal fade" id="printPopup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width:100%">
+            <div class="modal-content">
+                <div class="modal-header with-border text-white">
+                    <h2 class="modal-title"> </h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body ">
+                    <div id="printableDiv" class="container1">
+                        <div class="containers">
+                            @{
+                                foreach (var item in Model)
+                                {
+                                    <div class="row">
+                                        <div class="col-lg-9">
+                                            <div class="text-center" style="font-size: 12px;">
+                                                जन स्वास्थ्य अभियांत्रिकी विभाग, राजस्थान सरकार प्राप्ति - पार्श्व (उपभोक्ता)
+                                                <span style="border: 1px solid #000;">"पानी बचाओ, बिजली बचाओ सबको पढ़ाओ"</span>
+                                            </div>
+                                            <table class="table" style="border-color: #000; font-size: 9px; text-align: center; " cellpadding="0" cellspacing="0" border="1">
+                                                <tr>
+                                                    <td colspan="3" class="section-title">उपभोक्ता का नाम व पता</td>
+                                                    <td class="section-title">क्रम संख्या</td>
+                                                    <td class="section-title">सेवा क्रमांक</td>
+                                                    <td class="section-title">खाता संख्या</td>
+                                                    <td colspan="2" class="section-title">पुराना खाता संख्या</td>
+                                                    <td class="section-title">उपखंड संख्या</td>
+                                                    <td class="section-title">मीटर परिणाम</td>
+                                                    <td class="section-title">उपभोक्ता श्रेणी</td>
+                                                    <td class="section-title">माह</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3" rowspan="6" style="word-wrap: break-word; white-space: normal; text-align: center; ">
+                                                        @item.Name - @item.Address
+                                                    </td>
+                                                    <td colspan="1">@item.KNO</td>
+                                                    <td rowspan="1">@item.Service_No</td>
+                                                    <td rowspan="1">@item.Account_No</td>
+                                                    <td rowspan="1" colspan="2">
+                                                        @item.Old_Account_No
+                                                    </td>
+                                                    <td rowspan="1">@item.Chokdi</td>
+                                                    <td rowspan="1">@item.Meter_Result</td>
+                                                    <td>@item.Category</td>
+                                                    <td>@item.Bill_Month - @item.Bill_Year</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="section-title">मीटर क्रमांक</td>
+                                                    <td class="section-title">पठन तिथि</td>
+                                                    <td class="section-title">वर्तमान पठन</td>
+                                                    <td class="section-title">गत पठन</td>
+                                                    <td colspan="2" class="section-title">वितरण तिथि</td>
+                                                    <td colspan="2" class="section-title">अंतिम भुगतान तिथि चेक द्वारा</td>
+                                                    <td colspan="2" class="section-title">अंतिम भुगतान नकद द्वारा</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>@item.Meter_No</td>
+                                                    <td>@item.Current_Reading_Date</td>
+                                                    <td>@item.Current_Reading</td>
+                                                    <td>@item.Precious_Reading</td>
+                                                    <td colspan="2">@item.Current_Reading_Date</td>
+                                                    <td colspan="2">@item.Due_Date_Cash</td>
+                                                    <td colspan="2">@item.Due_Date_Cash</td>
+                                                </tr>
+                                                <tr>
+                                                    <td rowspan="2" class="section-title">कुल उपभोग(लीटर में)</td>
+                                                    <td rowspan="2" class="section-title">पूर्व उपभोग का समालोचन</td>
+                                                    <td rowspan="2" class="section-title">शुद्ध उपभोग(लीटर में)</td>
+                                                    <td rowspan="2" class="section-title">महीनो का</td>
+                                                    <td colspan="2" class="section-title">कुल उपभोग राशि</td>
+                                                    <td colspan="2" class="section-title">समायोजित उपभोग राशि</td>
+                                                    <td rowspan="2" class="section-title">सरकार द्वारा वहन की गयी राशि</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="section-title">जल उपभोग</td>
+                                                    <td class="section-title">सीवरेज</td>
+                                                    <td class="section-title">जल उपभोग</td>
+                                                    <td class="section-title">सीवरेज</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>@item.Net_Consumption</td>
+                                                    <td>@item.Adjusted_Consumption_Amount_Water</td>
+                                                    <td>@item.Net_Consumption</td>
+                                                    <td>@item.Adjusted_Consumption_Amount_Water</td>
+                                                    <td>@item.Water_Amount</td>
+                                                    <td>@item.Adjusted_Consumption_Amount_Water</td>
+                                                    <td>@item.Water_Amount</td>
+                                                    <td>@item.Sewerage_Amount</td>
+                                                    <td>@item.Government_Rebate</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" class="section-title">शुद्ध उपभोग राशि</td>
+                                                    <td rowspan="2" class="section-title">अतिरीक सीवरेज</td>
+                                                    <td rowspan="2" class="section-title">मीटर सर्विस चार्ज </td>
+                                                    <td rowspan="2" class="section-title">आधरभूत विकास सरचार्ज</td>
+                                                    <td rowspan="2" class="section-title">स्थाई शुल्क</td>
+                                                    <td rowspan="2" class="section-title">अप्राप्त राशि</td>
+                                                    <td rowspan="2" colspan="2" class="section-title">ब्याज/अन्य</td>
+                                                    <td rowspan="2" class="section-title">नियत तिथि तक कुल देय राशि</td>
+                                                    <td rowspan="2" class="section-title">विलम्ब भुगतान सरचार्ज</td>
+                                                    <td rowspan="2" class="section-title">नियत तिथि पश्चात कुल देय राशि</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="section-title">जल उपभोग</td>
+                                                    <td class="section-title">सीवरेज</td>
+                                                </tr>
+                                                <tr>
+
+                                                    <td>@item.Water_Amount</td>
+                                                    <td>@item.Sewerage_Amount</td>
+                                                    <td>@item.Excess_Sewerage</td>
+                                                    <td>@item.Meter_Service_Charge</td>
+                                                    <td>@item.Infrastructure_Development_Surcharge</td>
+                                                    <td>@item.Fix_Charge</td>
+                                                    <td>@item.Pending_Amount</td>
+                                                    <td>@item.Other</td>
+                                                    <td>@item.Other</td>
+                                                    <td>@item.Amount_On_Due_Date</td>
+                                                    <td>@item.LPS</td>
+                                                    <td>@item.Amount_After_Due_Date</td>
+                                                </tr>
+                                            </table>
+                                            <div class="row1 row mb-0" style="font-size:9px">
+                                                <div class="col-10">नोट: सर्विस सेंटर(सी एस सी) से जारी की गयी रसीद ही मान्य है</div>
+                                                <div class="col-2">सहायक अभियंता</div>
+                                            </div>
+                                            <div class="row mb-0" style="font-size:9px">
+                                                <div class="col-12">
+                                                    पानी के बिल इ-मित्र पोर्टल,www.emitra.rajasthan.gov.in इ-मिंत्र मोबाइल ऍप के द्वारा online भी जमा करवाए जा सकते है
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div style="text-align: center; font-size: 12px;">जन स्वास्थ्य अभियांत्रिकी विभाग, राजस्थान सरकार</div>
+                                            <div style="text-align: center; font-size: 10px;">
+                                                (कृपया इस पत्र को भुगतान के साथ प्रस्तुत करें)
+                                            </div>
+                                            <div style="text-align: center; font-size: 10px;">
+                                                <br />
+                                            </div>
+                                            <table class="table" cellpadding="0" cellspacing="0" border="1" style="border-color: #000; font-size: 9px; border-left: none; text-align: center; ">
+                                                <tr>
+                                                    <td class="section-title">क्रम संख्या</td>
+                                                    <td class="section-title">सेवा क्रमांक</td>
+                                                    <td class="section-title">उपखंड संख्या</td>
+                                                    <td class="section-title">खाता संख्या</td>
+                                                    <td class="section-title">माह</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>@item.KNO</td>
+                                                    <td>@item.Service_No</td>
+                                                    <td>@item.Binder_No</td>
+                                                    <td>@item.Account_No</td>
+                                                    <td>@item.Bill_Month - @item.Bill_Year</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" class="section-title">अंतिम भुगतान तिथि चेक द्वारा</td>
+                                                    <td colspan="2" class="section-title">अंतिम भुगतान तिथि नकद द्वारा</td>
+                                                    <td class="section-title">राशि प्राप्ति की मोहर</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">@item.Payment_Date</td>
+                                                    <td colspan="2">@item.Payment_Date</td>
+                                                    <td rowspan="5"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" class="section-title">नियत तिथि तक कुल देय राशि</td>
+                                                    <td colspan="2" class="section-title">नियत तिथि पश्चात कुल देय राशि</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">@item.Amount_On_Due_Date</td>
+                                                    <td colspan="2">@item.Amount_After_Due_Date</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" class="section-title">खाता संख्या</td>
+                                                    <td colspan="2" class="section-title">कंप्यूटर क्रमांक</td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">@item.Account_No</td>
+                                                    <td colspan="2">@item.Binder_No</td>
+
+                                                </tr>
+                                            </table>
+                                            <div class="row2 row mb-0" style="font-size:9px">
+                                                <div class="col-6">बार कोड</div>
+                                                <div class="col-5">सहायक अभियंता</div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+
+                    </div>
+                    <div class="col-lg-1">
+                        <div class="modal-footer with-border">
+                            <button type="button" class="btn btn-success" id="btnUpdate1">Print</button>
+                            @*<button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $("#btnUpdate1").on("click", function () {
+        var divContents = $("#printableDiv").html();
+        var printWindow = window.open('', '_blank');
+        printWindow.document.open();
+        printWindow.document.write(`
+                    <html>
+                    <head>
+                        <title>Print</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; }
+                            @@media print {
+                                .row {
+                                    display: flex !important;
+                                    flex-wrap: nowrap !important;
+                                    margin-bottom:8px !important;
+                                }
+                                .row1{
+                                    gap: 410px;
+                                }
+                                .row2{
+                                    gap:150px;
+                                }
+                                .col {
+                                    flex: 1 !important;
+                                    max-width: 100% !important;
+                                }
+                                .containers {
+                                    width: 100% !important;
+
+                                }
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        ${divContents}
+                    </body>
+                    </html>
+                `);
+        printWindow.document.close();
+        printWindow.print();
+    });
+
+
+</script>

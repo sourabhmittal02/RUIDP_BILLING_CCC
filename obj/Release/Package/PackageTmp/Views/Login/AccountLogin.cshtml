@@ -1,0 +1,282 @@
+﻿@model ComplaintTracker.Models.ModelUser
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    @*<meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="MGVCL">
+        <meta name="author" content="MGVCL">*@
+
+
+    @*<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>*@
+    @*<link rel="stylesheet" href="~/css/modern.css">
+        <script type="text/javascript" src="~/js/app.js"></script>*@
+
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Twitter -->
+    <meta name="twitter:site" content="Ajay">
+    <meta name="twitter:creator" content="Ajay">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Bracket">
+    <meta name="twitter:description" content="Premium Quality and Responsive UI for Dashboard.">
+    <meta name="twitter:image" content="http://themepixels.me/bracket/img/bracket-social.png">
+
+    <!-- Facebook -->
+    <meta property="og:url" content="http://themepixels.me/bracket">
+    <meta property="og:title" content="Bracket">
+    <meta property="og:description" content="Premium Quality and Responsive UI for Dashboard.">
+
+    <meta property="og:image" content="http://themepixels.me/bracket/img/bracket-social.png">
+    <meta property="og:image:secure_url" content="http://themepixels.me/bracket/img/bracket-social.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="600">
+
+    <!-- Meta -->
+    <meta name="description" content="Premium Quality and Responsive UI for Dashboard.">
+    <meta name="author" content="ThemePixels">
+
+    <title>@ViewBag.Title</title>
+
+
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
+    <!-- vendor css -->
+    <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="~/lib/Ionicons/css/ionicons.css" rel="stylesheet">
+
+    <!-- Bracket CSS -->
+    <link rel="stylesheet" href="~/css/bracket.css">
+
+</head>
+<!-- SET YOUR THEME -->
+@*<body class="theme-blue">
+        <div class="splash active">
+            <div class="splash-icon"></div>
+        </div>
+        <main class="main h-100 w-100">
+            <div class="container h-100">
+                <div class="row h-100">
+                    <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
+                        <div class="d-table-cell align-middle">
+
+                            <div class="text-center mt-4">
+                                <h1 class="h2">Welcome</h1>
+                                <p class="lead">
+                                    Sign in to your account to continue
+                                </p>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="m-sm-4">
+                                        <div class="text-center">
+                                            <img src="~/img/avatars/JDVVNL.jpg" alt="Linda Miller" class="img-fluid rounded-circle" width="132" height="132" />
+                                        </div>
+                                        @using (Html.BeginForm("AccountLogin", "Login", FormMethod.Post, new { name = "frm", id = "validation-form" }))
+                                        {
+                                            <div class="mb-3 error-placeholder">
+                                                <label class="form-label">Login Id</label>
+                                                @Html.EditorFor(model => model.LoginId, new { htmlAttributes = new { placeholder = "Enter your Login Id", @class = "form-control form-control-lg" } })
+                                            </div>
+                                            <div class="mb-3 error-placeholder">
+                                                <label class="form-label">Password</label>
+                                                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { placeholder = "Enter your password", @class = "form-control form-control-lg", @type = "password" } })
+                                            </div>
+                                            <div class="text-center mt-3">
+                                                <input type="hidden" name="ReturnUrl" value="@Request.QueryString["ReturnUrl"]" />
+
+                                                <button type="button" class="btn btn-lg btn-primary" onclick="ShowOTP()">Sign in</button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+
+    </body>*@
+
+<body>
+
+    <div class="d-flex align-items-center justify-content-center bg-br-primary ht-100v">
+
+        <div class="login-wrapper wd-300 wd-xs-350 pd-25 pd-xs-40 bg-white rounded shadow-base">
+            <div class="signin-logo tx-center tx-28 tx-bold tx-inverse"><span class="tx-normal">[</span> RUIDP <span class="tx-normal">]</span></div>
+            <div class="tx-center mg-b-60">Login Panel</div>
+
+            @using (Html.BeginForm("AccountLogin", "Login", FormMethod.Post, new { name = "frm", id = "validation-form" }))
+            {
+                <div class="form-group">
+                    @Html.EditorFor(model => model.LoginId, new { htmlAttributes = new { placeholder = "Enter your Login Id", @class = "form-control" } })
+                </div>
+                @*<input type="text" class="form-control" placeholder="Enter your username">*@
+
+                <div class="form-group">
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { placeholder = "Enter your password", @class = "form-control", @type = "password" } })
+                </div>
+                @*<input type="password" class="form-control" placeholder="Enter your password">*@
+                <a href="" class="tx-info tx-12 d-block mg-t-10 invisible">Forgot password?</a>
+                <button type="button" class="btn btn-info btn-block" onclick="ShowOTP()">Sign in</button>
+                @*<button type="submit" class="btn btn-info btn-block">Sign In</button>*@
+            }
+            <div  class="mg-t-60 tx-center invisible">Not yet a member? <a href="" class="tx-info">Sign Up</a></div>
+        </div><!-- login-wrapper -->
+    </div><!-- d-flex -->
+    <div id="loadRemarkPopUp">
+
+    </div>
+    <script src="~/lib/jquery/jquery.js"></script>
+    <script src="~/lib/popper.js/popper.js"></script>
+    <script src="~/lib/bootstrap/bootstrap.js"></script>
+
+</body>
+
+</html>
+
+<script>
+    $(document).ready(function () {
+        /*$agent_screen_url = 'http://199.175.53.143/agent/agent.php';*/
+        /*$agent_screen_url = 'http://gmail.com';*/
+        fieldValidate();
+    });
+    var ShowOTP = function () {
+    var TeamDetailPostBackURL = '/Login/ShowLoginOTP';
+        var dataType = 'application/json; charset=utf-8';
+        var user = {
+            LoginId: $('#LoginId').val(),
+            Password: $('#Password').val(),
+        }
+        $.ajax({
+            type: "GET",
+            url: TeamDetailPostBackURL,
+            contentType: "application/json; charset=utf-8",
+            "data": user,
+            datatype: "json",
+            success: function (result) {
+                if (result.status === -1) {
+                    alert("Invalid Credentials");
+                    return;
+                }
+                else if (result.status === "success")
+                {
+                    @*var saveUrl = '@Url.Action("Index", "Dashboard")';
+                    window.location.href = saveUrl;*@
+                    window.location.href = result.redirectUrl;
+                }
+                else {
+                    $('#loadRemarkPopUp').html(result);
+                    $("#AssignPopup").modal('show');
+                }
+
+
+            },
+            error: function () {
+                alert("Invalid UserName or Password");
+            }
+        });
+
+    }
+
+
+     function showLoginerror() {
+            var message = '@ViewBag.Message';
+            var title = "Login Error";
+            var type = "error";
+            toastr[type](message, title, {
+                positionClass: "toast-top-right",
+                closeButton: "checked",
+                progressBar: "checked",
+                newestOnTop: "checked",
+                rtl: $("body").attr("dir") === "rtl" || $("html").attr("dir") === "rtl",
+                timeOut: 5000
+            });
+    }
+
+
+     function showLogoutInfo() {
+             var message =     '@TempData["loginmsg"]';
+            var title = "Logout user";
+            var type = "warning";
+            toastr[type](message, title, {
+                positionClass: "toast-top-right",
+                closeButton: "checked",
+                progressBar: "checked",
+                newestOnTop: "checked",
+                rtl: $("body").attr("dir") === "rtl" || $("html").attr("dir") === "rtl",
+                timeOut: 5000
+            });
+        }
+
+    function fieldValidate() {
+        // Initialize validation
+        $("#validation-form").validate({
+            ignore: ".ignore",
+            focusInvalid: true,
+            rules: {
+                "LoginId": {
+                    required: true
+                },
+                "Password": {
+                    required: true
+                },
+            },
+            // Errors
+            errorPlacement: function errorPlacement(error, element) {
+                var $parent = $(element).parents(".error-placeholder");
+                // Do not duplicate errors
+                if ($parent.find(".jquery-validation-error").length) {
+                    return;
+                }
+                $parent.append(
+                    error.addClass("jquery-validation-error small form-text invalid-feedback")
+                );
+            },
+            highlight: function (element) {
+                var $el = $(element);
+                var $parent = $el.parents(".error-placeholder");
+                $el.addClass("is-invalid");
+                // Select2 and Tagsinput
+                if ($el.hasClass("select2-hidden-accessible") || $el.attr("data-role") === "tagsinput") {
+                    $el.parent().addClass("is-invalid");
+                }
+            },
+            unhighlight: function (element) {
+                $(element).parents(".error-placeholder").find(".is-invalid").removeClass("is-invalid");
+            }
+        });
+
+
+
+    }
+</script>
+
+@if (ViewBag.Message != null)
+{
+    <script>
+        showLoginerror();
+    </script>
+}
+
+@if (TempData["loginmsg"] != null)
+{
+    <script>
+        showLogoutInfo();
+    </script>
+}

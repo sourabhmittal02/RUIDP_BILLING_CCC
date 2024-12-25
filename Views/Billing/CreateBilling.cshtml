@@ -1,0 +1,322 @@
+﻿@model ComplaintTracker.Models.ModelBilling
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var fromDate = DateTime.Now;
+}
+
+
+
+@section scripts{
+
+    <link href="~/Content/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="~/Scripts/select2.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(() => {
+            var tempdataval = '@TempData["AlertMessage"]';
+    if (tempdataval != null && tempdataval != '') {
+        var bm = '@TempData["Bm"]';
+         var by = '@TempData["By"]';
+        $('#Current_Reading').val('0');
+        $('#bm').val(bm);
+        $('#by').val(by);
+    }
+
+
+
+            $('select:not(.normal)').each(function () {
+                $(this).select2({
+                    dropdownParent: $(this).parent()
+                });
+            });
+            $(".searchtag").keypress(function (event) {
+                if (event.which == 13) {
+                    $("#btnSearch").click();
+                    return false;
+                }
+            });
+            setTimeout(function () {
+                $('#successMessage').fadeOut('fast');
+            }, 5000); // <-- time in milliseconds
+
+        });
+        $(function () {
+            $('#Consumertype').select2({
+                selectOnClose: true,
+            });
+            $('#bm').select2({
+                selectOnClose: true,
+            });
+            $('#by').select2({
+                selectOnClose: true,
+            });
+
+            $('#btnSearch').click(function () {
+
+                searchKno = $('#txtsearchKno').val();
+
+                $.ajax({
+                    type: "GET",
+                    url: '/Billing/GetList',
+                    data: { kno: searchKno },
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    async: "true",
+                    cache: "false",
+                    success: function (data) {
+                        /*                          alert(data.complaintHistories[0].Kno)*/
+                        $('#comp').DataTable(
+                            {
+                                data: data.billingHistories,
+                                columns: [
+                                    {
+                                        'width': 120,
+                                        data: 'Kno',
+                                        name: 'Kno',
+                                        render: function (data, type, row, meta) {
+                                            return '<a class=" d-inline-block fw-normal w-100 h-100 pe-auto" href="#" onclick="complaintShow(' + row.Kno + ')">' + row.Kno + '</a>'
+                                        },
+                                    },
+                                    { 'data': 'name', 'width': 300 },
+                                    { 'data': 'Address', 'width': 500 },
+                                    { 'data': 'Last_Reading' },
+                                    { 'data': 'Service_Status', 'width': 100 },
+                                    { 'data': 'Last_Reading_Date' },
+                                    { 'data': 'Binder_No' },
+                                    { 'data': 'Account_No' },
+                                ],
+                                processing: true,
+                                pageLength: 5,
+                                lengthChange: false,
+                                bFilter: false,
+                                destroy: true,
+                                bSort: false
+                            });
+                        /*$('#comp').DataTable().row("tr:first-child").remove().draw();*/
+                        $('#submitComplaint').prop('disabled', false);
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            });
+
+            $('#submitComplaint').click(function () {
+                $("#Kno").val($("#lblkno").val());
+                $("#BIll_Month").val($("#bm").val());
+                $("#BIll_Year").val($("#by").val());
+            });
+
+        });
+
+        var complaintShow = function (recordId) {
+            var TeamDetailPostBackURL = '/Billing/ShowComplaint';
+            $.ajax({
+                type: "GET",
+                url: TeamDetailPostBackURL,
+                contentType: "application/json; charset=utf-8",
+                data: { "Id": recordId },
+                datatype: "json",
+                success: function (data) {
+                    $("#lblkno").val(data.billingHistories[0].Kno);
+                    $("#lblMeterno").val(data.billingHistories[0].Service_Status);
+                    $("#lblprd").val(data.billingHistories[0].Last_Reading_Date);
+                    $("#lblpr").val(data.billingHistories[0].Last_Reading);
+                },
+                error: function () {
+                    alert("error occured.");
+                }
+            });
+        }
+    </script>
+}
+
+@if (TempData["AlertMessage"] != null)
+{
+    <script type="text/javascript">
+        var msg = '@TempData["AlertMessage"]'
+        var retStatus = '@TempData["retStatus"]'
+        //alert(msg);
+        if (retStatus.includes("0")) {
+            swal("Error!", msg, "error");
+        }
+        else {
+            debugger;
+            $('#submitComplaint').prop('disabled', true);
+            swal("Good job!", msg, "success");
+        }
+    </script>
+}
+
+
+@Html.AntiForgeryToken()
+<div class="br-pageheader pd-y-15 pd-l-20">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+        <a class="breadcrumb-item" href="~/Dashboard/Index">Bracket</a>
+        @*<a class="breadcrumb-item" href="#">Forms</a>*@
+        <span class="breadcrumb-item active">Billing</span>
+    </nav>
+</div><!-- br-pageheader -->
+<div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
+    <h4 class="tx-gray-800 mg-b-5">Create Billing</h4>
+    @*<p class="mg-b-0">Forms are used to collect user information with different element types of input, select, checkboxes, radios and more.</p>*@
+</div>
+
+<div class="br-pagebody">
+    <div id="loadRemarkPopUp">
+
+    </div>
+    <div class="br-section-wrapper">
+        <h6 class="tx-gray-800 tx-uppercase tx-bold tx-14 mg-b-10">Search Billing</h6>
+        @*<p class="mg-b-30 tx-gray-600">A form with a label on top of each form control.</p>*@
+
+        <div class="form-layout form-layout-1">
+            <div class="row mg-b-25">
+                <div class="col-lg-4">
+                    <div class="form-group mg-b-10-force">
+                        <input id="txtsearchKno" name="searchKno" value="" type="number" placeholder="KNo." class="form-control searchtag" required />
+                    </div>
+                </div><!-- col-4 -->
+
+                <div class="col-lg-4">
+                    <div class="form-group mg-b-10-force">
+                        <button class="btn btn-info" id="btnSearch">Search</button>
+                    </div>
+                </div><!-- col-4 -->
+            </div>
+
+            @using (Html.BeginForm("CreateBilling", "Billing", FormMethod.Post, new { name = "frm", data_parsley_validate = "" }))
+            {
+                @*<h6 class="tx-gray-800 tx-uppercase tx-bold tx-14 mg-b-10">Previous Complaint History</h6>*@
+                <div class="form-layout form-layout-1">
+                    <div class="row mg-b-25">
+                        <table id="comp" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Kno</th>
+                                    <th>Name</th>
+                                    <th>Address</th>
+                                    <th>Last Reading</th>
+                                    <th>Service Status</th>
+                                    <th>Last Reading Date</th>
+                                    <th>Binder No.</th>
+                                    <th>Account No.</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-layout form-layout-1 mg-t-10">
+                    <div class="row mg-b-25">
+                        <div class="col-lg-3">
+                            <div class="form-group mg-b-10-force">
+                                <label class="form-control-label">#KNo.</label>
+                                <input class="form-control searchtag" id="lblkno" name="txtkno" type="text" value="" placeholder="" readonly="readonly" />
+                            </div>
+                        </div><!-- col-3 -->
+                        <div class="col-lg-3">
+                            <div class="form-group mg-b-10-force">
+                                <label class="form-control-label">Service Status</label>
+                                <input class="form-control searchtag" id="lblMeterno" name="txtkno" type="text" value="" placeholder="" readonly="readonly" />
+                            </div>
+                        </div><!-- col-3 -->
+                        <div class="col-lg-3">
+                            <div class="form-group mg-b-10-force">
+                                <label class="form-control-label">Last reading Date</label>
+                                <input class="form-control searchtag" id="lblprd" name="txtkno" type="text" value="" placeholder="" readonly="readonly" />
+                            </div>
+                        </div><!-- col-3 -->
+                        <div class="col-lg-3">
+                            <div class="form-group mg-b-10-force">
+                                <label class="form-control-label">Last reading</label>
+                                <input class="form-control searchtag" id="lblpr" name="txtkno" type="text" value="" placeholder="" readonly="readonly" />
+                            </div>
+                        </div><!-- col-3 -->
+                    </div>
+
+                </div>
+                <div class="form-layout form-layout-1 mg-t-10" id="dco">
+                    <div class="row mg-b-25">
+                        <div class="col-lg-3">
+                            <div class="form-group mg-b-10-force">
+                                <label class="form-control-label">Bill Month <span class="tx-danger">*</span></label>
+                                @Html.DropDownList("ddlBM", new List<SelectListItem>
+                                    {
+                                    new SelectListItem{ Text="Jan", Value = "1" },
+                                    new SelectListItem{ Text="Feb", Value = "2" },
+                                    new SelectListItem{ Text="Mar", Value = "3" },
+                                    new SelectListItem{ Text="Apr", Value = "4" },
+                                    new SelectListItem{ Text="May", Value = "5" },
+                                    new SelectListItem{ Text="Jun", Value = "6" },
+                                    new SelectListItem{ Text="Jul", Value = "7" },
+                                    new SelectListItem{ Text="aug", Value = "8" },
+                                    new SelectListItem{ Text="Sept", Value = "9" },
+                                    new SelectListItem{ Text="Oct", Value = "10" },
+                                    new SelectListItem{ Text="Nov", Value = "11" },
+                                    new SelectListItem{ Text="Dec", Value = "12" },
+                                    }, new { @class = "form-control select2", id = "bm", @required = true })
+                            </div>
+                        </div><!-- col-4 -->
+
+                        <div class="col-lg-3">
+                            <div class="form-group mg-b-10-force">
+                                <label class="form-control-label">Bill Year <span class="tx-danger">*</span></label>
+                                @Html.DropDownList("ddlBY", new List<SelectListItem>
+                                    {
+                                    new SelectListItem{ Text="2024", Value = "2024" },
+                                    new SelectListItem{ Text="2025", Value = "2025" },
+                                    new SelectListItem{ Text="2026", Value = "2026" },
+                                    new SelectListItem{ Text="2027", Value = "2027" },
+                                    new SelectListItem{ Text="2028", Value = "2028" },
+                                    new SelectListItem{ Text="2029", Value = "2029" },
+                                    new SelectListItem{ Text="2030", Value = "2030" },
+                                    new SelectListItem{ Text="2031", Value = "2031" },
+                                    new SelectListItem{ Text="2032", Value = "2032" },
+                                    new SelectListItem{ Text="2033", Value = "2033" },
+                                    }, new { @class = "form-control select2", id = "by", @required = true })
+                            </div>
+                        </div><!-- col-4 -->
+
+                        <div class="col-lg-3">
+                            <div class="form-group mg-b-10-force">
+                                <label class="form-control-label">Current reading<span class="tx-danger">*</span></label>
+                                @Html.EditorFor(model => model.Current_Reading, new { htmlAttributes = new { @class = "form-control", @placeholder = "", @required = true } })
+                            </div>
+                        </div><!-- col-3 -->
+                        <div class="col-lg-3">
+                            <div class="form-group mg-b-10-force">
+                                <label class="form-control-label">Current Reading date<span class="tx-danger">*</span></label>
+                                @Html.EditorFor(model => model.Current_Reading_Date, string.Format("{0:yyyy-MM-dd}", fromDate), new { htmlAttributes = new { @class = "form-control", @type = "date", @required = true } })
+                            </div>
+                        </div><!-- col-3 -->
+                    </div>
+                    <div class="row mg-b-10">
+                        <div class="col-lg-2">
+                            <div class="form-group mg-b-10-force">
+                                <input type="submit" value="Save" class="btn btn-primary btn-block" id="submitComplaint" onclick="return stopMultipleSubmit();" />
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- form-layout -->
+
+                @Html.HiddenFor(model => model.Kno)
+                @Html.HiddenFor(model => model.BIll_Month)
+                @Html.HiddenFor(model => model.BIll_Year)
+
+            }
+        </div>
+
+
+        <div class="row mg-b-25">
+
+        </div>
+    </div><!-- br-section-wrapper -->
+</div><!-- br-pagebody -->
+
+<script src="~/lib/parsleyjs/parsley.js"></script>
+

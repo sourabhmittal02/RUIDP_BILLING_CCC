@@ -1,0 +1,144 @@
+﻿@model ComplaintTracker.Models.ModelBillingPrint
+@{
+    ViewBag.Title = "Print Bill";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="br-pageheader pd-y-15 pd-l-20">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+        <a class="breadcrumb-item" href="~/Dashboard/Index">Bracket</a>
+        @*<a class="breadcrumb-item" href="#">Forms</a>*@
+        <span class="breadcrumb-item active">Advice</span>
+    </nav>
+</div><!-- br-pageheader -->
+<div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
+    @*<h4 class="tx-gray-800 mg-b-5">Create Advice</h4>*@
+    @*<p class="mg-b-0">Forms are used to collect user information with different element types of input, select, checkboxes, radios and more.</p>*@
+</div>
+<div class="br-pagebody">
+
+    <div class="br-section-wrapper">
+        <div class="form-layout form-layout-1">
+            <div class="col-lg-9">
+                <div class="text-center">
+                    जन स्वास्थ्य अभियांत्रिकी विभाग, राजस्थान सरकार प्राप्ति - पार्श्व
+                    <span style="border: 1px solid #000;">"पानी बचाओ, बिजली बचाओ सबको पढ़ाओ"</span>
+                </div>
+                <table class="table table-bordered">
+                    <tr>
+                        <td colspan="3" class="section-title">उपभोक्ता का नाम व पता</td>
+                        <td class="section-title">क्रम संख्या</td>
+                        <td class="section-title">सेवा क्रमांक</td>
+                        <td class="section-title">खाता संख्या</td>
+                        <td colspan="2" class="section-title">पुराना खाता संख्या</td>
+                        <td class="section-title">उपखंड संख्या</td>
+                        <td class="section-title">मीटर परिणाम</td>
+                        <td class="section-title">उपभोक्ता श्रेणी</td>
+                        <td class="section-title">माह</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" rowspan="6">
+                            <input type="text" class="form-control"
+                                   placeholder="उपभोक्ता का नाम व पता">
+                        </td>
+                        <td colspan="1"><input type="text" class="form-control" placeholder="क्रम संख्या"></td>
+                        <td rowspan="1"><input type="text" class="form-control" placeholder="सेवा क्रमांक"></td>
+                        <td rowspan="1"><input type="text" class="form-control" placeholder="खाता संख्या"></td>
+                        <td rowspan="1" colspan="">
+                            <input type="text" class="form-control"
+                                   placeholder="पुराना खाता संख्या">
+                        </td>
+                        <td rowspan="1"><input type="text" class="form-control" placeholder="उपखंड संख्या"></td>
+                        <td rowspan="1"><input type="text" class="form-control" placeholder="मीटर परिणाम"></td>
+                        <td><input type="text" class="form-control" placeholder="उपभोक्ता श्रेणी"></td>
+                        <td><input type="text" class="form-control" placeholder="माह"></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2" class="section-title">मीटर क्रमांक</td>
+                        <td class="section-title">पठन तिथि</td>
+                        <td class="section-title">वर्तमान पठन</td>
+                        <td class="section-title">गत पठन</td>
+                        <td class="section-title">वितरण तिथि</td>
+                        <td colspan="2" class="section-title">अंतिम भुगतान तिथि चेक द्वारा</td>
+                        <td colspan="2" class="section-title">अंतिम भुगतान नकद द्वारा</td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="form-control" placeholder="पठन तिथि"></td>
+                        <td><input type="text" class="form-control" placeholder="वर्तमान पठन"></td>
+                        <td><input type="text" class="form-control" placeholder="गत पठन"></td>
+                        <td><input type="text" class="form-control" placeholder="वितरण तिथि"></td>
+                        <td colspan="2"><input type="text" class="form-control" placeholder="चेक द्वारा"></td>
+                        <td colspan="2"><input type="text" class="form-control" placeholder="नकद द्वारा"></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2" class="section-title">कुल उपभोग(लीटर में)</td>
+                        <td rowspan="2" class="section-title">पूर्व उपभोग का समालोचन</td>
+                        <td rowspan="2" class="section-title">शुद्ध उपभोग(लीटर में)</td>
+                        <td rowspan="2" class="section-title">महीनो का</td>
+                        <td colspan="2" class="section-title">कुल उपभोग राशि</td>
+                        <td colspan="2" class="section-title">समायोजित उपभोग राशि</td>
+                        <td rowspan="2" class="section-title">सरकार द्वारा वहन की गयी राशि</td>
+                    </tr>
+                    <tr>
+                        <td class="section-title">जल उपभोग</td>
+                        <td class="section-title">सीवरेज</td>
+                        <td class="section-title">जल उपभोग</td>
+                        <td class="section-title">सीवरेज</td>
+                    </tr>
+                    <tr>
+                        <td>@Model.Name</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="section-title">शुद्ध उपभोग राशि</td>
+                        <td rowspan="2" class="section-title">अतिरीक सीवरेज</td>
+                        <td rowspan="2" class="section-title">मीटर सर्विस चार्ज </td>
+                        <td rowspan="2" class="section-title">आधरभूत विकास सरचार्ज</td>
+                        <td rowspan="2" class="section-title">स्थाई शुल्क</td>
+                        <td rowspan="2" class="section-title">अप्राप्त राशि</td>
+                        <td rowspan="2" colspan="2" class="section-title">ब्याज/अन्य</td>
+                        <td rowspan="2" class="section-title">नियत तिथि तक कुल देय राशि</td>
+                        <td rowspan="2" class="section-title">विलम्ब भुगतान सरचार्ज</td>
+                        <td rowspan="2" class="section-title">नियत तिथि पश्चात कुल देय राशि</td>
+                    </tr>
+                    <tr>
+                        <td class="section-title">जल उपभोग</td>
+                        <td class="section-title">सीवरेज</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-lg-3">
+                <div class="modal-footer with-border">
+                    @*<button type="submit" class="btn btn-success" id="btnUpdate">Print</button>*@
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+                    <a href="@Url.Action("ExportPdf","Report")">Export</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+}

@@ -1,0 +1,363 @@
+﻿@model ComplaintTracker.Models.ModelNewConnectionRUIDP
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var fromDate = DateTime.Now;
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="br-pageheader pd-y-15 pd-l-20">
+        <nav class="breadcrumb pd-0 mg-0 tx-12">
+            <a class="breadcrumb-item" href="~/Dashboard/Index">Bracket</a>
+            @*<a class="breadcrumb-item" href="#">Forms</a>*@
+            <span class="breadcrumb-item active">New Connection</span>
+        </nav>
+    </div><!-- br-pageheader -->
+    <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
+        <h4 class="tx-gray-800 mg-b-5">Create New Connection</h4>
+        @*<p class="mg-b-0">Forms are used to collect user information with different element types of input, select, checkboxes, radios and more.</p>*@
+    </div>
+    <div class="br-pagebody">
+        <div class="br-section-wrapper">
+            <h6 class="tx-gray-800 tx-uppercase tx-bold tx-14 mg-b-10">Search Advice</h6>
+            @*<p class="mg-b-30 tx-gray-600">A form with a label on top of each form control.</p>*@
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <div class="row mg-b-25">
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label>Order Date <span class="tx-danger">*</span></label>
+                            @Html.EditorFor(model => model.OrderDate, string.Format("{0:yyyy-MM-dd}", fromDate), new { htmlAttributes = new { @class = "form-control", @type = "date", @required = true } })
+                            @Html.ValidationMessageFor(model => model.OrderDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Order Type<span class="tx-danger">*</span></label>
+                            @Html.EditorFor(model => model.Order_Type, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Order_Type, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Amount</label>
+                            @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">SNo.<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.Sno, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Sno, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Applicant Name<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.ApplicantName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ApplicantName, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row mg-b-25">
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">RegNo<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.RegNo, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.RegNo, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+
+
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Prev_acc_no<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.Prev_acc_no, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Prev_acc_no, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">father_name<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.father_name, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.father_name, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+
+
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Adhaar_no<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.Adhaar_no, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Adhaar_no, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Bhamasha_no<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.Bhamasha_no, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Bhamasha_no, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row mg-b-25">
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">WaterConnAdd<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.WaterConnAdd, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.WaterConnAdd, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Neighbour_bill_ac<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.Neighbour_bill_ac, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Neighbour_bill_ac, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">SewerageCode<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.SewerageCode, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.SewerageCode, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">old Meter current<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.oldMetercurr, string.Format("{0:yyyy-MM-dd}", fromDate), new { htmlAttributes = new { @class = "form-control", @type = "date", @required = true } })
+                            @Html.ValidationMessageFor(model => model.oldMetercurr, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">WatPlotAreaerConnAdd<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.PlotArea, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.PlotArea, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+                </div>
+            </div>
+
+
+
+
+            <div class="form-group">
+                <div class="row mg-b-25">
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">BuildingArea<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.BuildingArea, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.BuildingArea, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">BuildingType<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.BuildingType, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.BuildingType, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">AppStats<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.AppStats, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.AppStats, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Address<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">OffAddress<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.OffAddress, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.OffAddress, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row mg-b-25">
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">ConnectionPurpose<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.ConnectionPurpose, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ConnectionPurpose, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">ServiceLineType<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.ServiceLineType, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ServiceLineType, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">WaterConnType<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.WaterConnType, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.WaterConnType, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">DocumentSubmitted<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.DocumentSubmitted, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.DocumentSubmitted, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">PipeDist<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.PipeDist, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.PipeDist, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="row mg-b-25">
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">RoadRepairAmm<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.RoadRepairAmm, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.RoadRepairAmm, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Receipt_no<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.Receipt_no, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Receipt_no, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Receipt_date<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.Receipt_date, string.Format("{0:yyyy-MM-dd}", fromDate), new { htmlAttributes = new { @class = "form-control", @type = "date", @required = true } })
+                            @Html.ValidationMessageFor(model => model.Receipt_date, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">WaterConnecionSecDep<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.WaterConnecionSecDep, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.WaterConnecionSecDep, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">OtherDep<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.OtherDep, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.OtherDep, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="row mg-b-25">
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">TotalDep<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.TotalDep, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.TotalDep, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Connection_date<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.Connection_date, string.Format("{0:yyyy-MM-dd}", fromDate), new { htmlAttributes = new { @class = "form-control", @type = "date", @required = true } })
+                            @Html.ValidationMessageFor(model => model.Connection_date, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">JE_Card_No<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.JE_Card_No, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.JE_Card_No, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Commission_date<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.Commission_date, string.Format("{0:yyyy-MM-dd}", fromDate), new { htmlAttributes = new { @class = "form-control", @type = "date", @required = true } })
+                            @Html.ValidationMessageFor(model => model.Commission_date, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">R2_Register_no<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.R2_Register_no, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.R2_Register_no, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row mg-b-25">
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">AllotedAcc_no<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.AllotedAcc_no, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.AllotedAcc_no, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Service_no<span class="tx-danger"></span></label>
+                            @Html.EditorFor(model => model.Service_no, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Service_no, "", new { @class = "text-danger" })
+                        </div>
+                    </div><!-- col-3 -->
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create New Connection" class="btn btn-info" />
+                </div>
+            </div>
+        </div><!-- br-section-wrapper -->
+    </div><!-- br-pagebody -->
+}
+
+@*<div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@
