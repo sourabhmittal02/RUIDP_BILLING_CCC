@@ -1,0 +1,281 @@
+﻿@model ComplaintTracker.Models.PaymentModes
+@{
+    ViewBag.Title = "Report Payment Data";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<link href="~/Content/css/select2.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="~/Scripts/select2.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        //// Datatables with Buttons
+        //var datatablesButtons = $("#datatables-buttons").DataTable({
+        //    responsive: true,
+        //    lengthChange: !1,
+        //    //buttons: ["copy", 'csv', 'print'],
+        //    buttons: null,
+
+        //});
+        //datatablesButtons.buttons().container().appendTo("#datatables-buttons_wrapper .col-md-6:eq(0)");
+
+    });
+    $(document).ready(function () {
+
+        @*if (@ViewBag.cno != '') {
+            $('#consumerno').val('@ViewBag.cno');
+        }*@
+
+        $('select:not(.normal)').each(function () {
+            $(this).select2({
+                dropdownParent: $(this).parent()
+            });
+        });
+
+    });
+
+
+    $(function () {
+
+
+        var $select = $('#ddlOfficecode').select2({
+            allowClear: true,
+        });
+
+        $select.on('change', function () {
+            $(this).trigger('blur');
+        });
+
+
+        $('#ddlZone').select2({
+            placeholder: "Zone",
+            selectOnClose: true,
+        }).change(function () {
+            $(this).valid();
+        });
+
+
+        var count = 0;
+        $('#ddlZone').change(function () {
+            $("#ddlDma").empty().trigger('change');
+            var selectedZoneId = $("#ddlZone").val();
+            filldma(selectedZoneId);
+
+        });
+
+        $('#ddlChokdi').change(function () {
+
+            $("#ddlBinder").empty().trigger('change');
+            var selectChokdiId = $("#ddlChokdi").val();
+            fillBinderNoByChokdi(selectChokdiId);
+
+        });
+
+        $('#ddlDma').change(function () {
+            $("#ddlBinder").empty().trigger('change');
+            var selectedZoneId = $("#ddlZone").val();
+            var selecteddmaId = $("#ddlDma").val();
+            //alert(selectedZoneId);
+            //alert(selecteddmaId);
+            if (selecteddmaId > 0) {
+                fillBinderNo(selectedZoneId, selecteddmaId);
+            }
+
+        });
+
+        function filldma(selectedZoneId) {
+            $.ajax({
+                type: "GET",
+                url: '/Report/GetDmaById',
+                data: { zoneId: selectedZoneId },
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    if (data) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var opt = new Option(data[i].Name, data[i].Id);
+                            $('#ddlDma').append(opt);
+                        }
+                        return;
+                    } else {
+                        alert('error');
+                    }
+                }
+            });
+        }
+        function fillBinderNo(selzoneId, seldmaId) {
+            $.ajax({
+                type: "GET",
+                url: '/Report/GetBinderNo',
+                data: { zoneId: selzoneId, dmaId: seldmaId },
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    if (data) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var opt = new Option(data[i].Id, data[i].Name);
+                            $('#ddlBinder').append(opt);
+                        }
+                        return;
+                    } else {
+                        alert('error');
+                    }
+                }
+            });
+        }
+
+        function fillBinderNoByChokdi(selChokdiId) {
+            $.ajax({
+                type: "GET",
+                url: '/Report/GetBinderNoByChokdi',
+                data: { ChokdiId: selChokdiId },
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    if (data) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var opt = new Option(data[i].Id, data[i].Name);
+                            $('#ddlBinder').append(opt);
+                        }
+                        return;
+                    } else {
+                        alert('error');
+                    }
+                }
+            });
+        }
+
+
+
+    });
+
+</script>
+<script type="text/javascript">
+    var showPrintPreview = function () {
+
+        //ZoneId = $("#ddlZone").val();
+        //dmaId = $("#ddlDma").val();
+        ChokdiId = $("#ddlChokdi").val();
+        binderNo = $("#ddlBinder").val();
+        bm = $("#bm").val();
+        by = $("#by").val();
+        var TeamDetailPostBackURL = '/Report/GetList';
+
+        $.ajax({
+            type: "GET",
+            url: TeamDetailPostBackURL,
+            contentType: "application/json; charset=utf-8",
+            //data: { strzoneId: ZoneId, strdmaId: dmaId, strbinderNo: binderNo, strbm: bm, strby: by },
+            data: { strchokdiId: ChokdiId, strbinderNo: binderNo, strbm: bm, strby: by },
+            xhrFields: {
+                responseType: 'blob' // Important for handling binary data
+            },
+            success: function (data, status, xhr) {
+                var blob = new Blob([data], { type: 'application/pdf' });
+                var link = document.createElement('a');
+                var url = window.URL.createObjectURL(blob);
+                link.href = url;
+                link.download = "filled_form.pdf";
+                document.body.appendChild(link);
+                link.click();
+                setTimeout(function () {
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
+                }, 100);
+            },
+            error: function () {
+                alert("Dynamic content load failed.");
+            }
+        });
+    }
+</script>
+
+<div class="br-pagebody">
+    <div id="loadRemarkPopUp">
+
+    </div>
+    <div class="br-section-wrapper">
+        <h6 class="tx-gray-800 tx-uppercase tx-bold tx-14 mg-b-10">Search Technical Complaint</h6>
+
+
+        <div class="form-layout form-layout-1 mg-b-10">
+            @using (Html.BeginForm("ReportPaymentData", "Report", FormMethod.Post, new { name = "frm", id = "validation-form" }))
+            {
+                <div class="row mg-b-25">
+
+                    <!-- col-4 -->
+                    @*<div class="col-lg-3">
+                            <div class="form-group mg-b-10-force">
+                                <label class="form-control-label">Zone<span class="tx-danger">*</span></label>
+                                @Html.DropDownListFor(x => Model.zoneId, new SelectList(Model.LstBillingZone, "ZoneId", "ZoneName"), "Select Zone", new { @class = "form-control select2", id = "ddlZone" })
+                            </div>
+                        </div>*@
+                    <div class="col-lg-3">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Chokdi<span class="tx-danger">*</span></label>
+                            @Html.DropDownListFor(x => Model.PaymentMode, new SelectList(ViewBag.Modes, "PaymentMode", "PaymentMode"), "Select Payment Mode", new { @class = "form-control select2", @id = "ddlPmode", @name = "ddlPmode" })
+                        </div>
+                    </div>
+
+                    <!-- col-4 -->
+                    @*<div class="col-lg-3">
+                            <div class="form-group mg-b-10-force">
+                                <label class="form-control-label">DMA<span class="tx-danger">*</span></label>
+                                <select id="ddlDma" class="form-control select2">
+                                </select>
+                            </div>
+                        </div>*@
+                    <!-- col-4 -->
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Binder<span class="tx-danger">*</span></label>
+                            <input type="date" name="payment_date" />
+                        </div>
+                    </div>
+                  <!-- col-4 -->
+
+                    <!-- col-4 -->
+                </div><!-- row -->
+
+                <div class="row mg-b-25">
+
+                    <div class="col-lg-1">
+                        <div class="form-group mg-b-10-force">
+                            @*<input type="button" value="Search" class="btn btn-primary btn-block" id="btnSearch" onclick="showPrintPreview()" name="btnSearch" />*@
+                            <input type="submit" value="Search" class="btn btn-primary btn-block" id="btnSearch" name="btnSearch" />
+                            @*<button class="btn btn-info" id="btnSearch" type="submit">Search</button>*@
+                        </div>
+                    </div>
+                    @*<div class="col-lg-1">
+                            <div class="form-group mg-b-10-force">
+                                <input type="button" value="Export" class="btn btn-primary btn-block" id="Export" onclick="myfun1()" name="Export" />
+                            </div>
+                        </div>*@
+
+                </div>
+
+            }
+
+        </div><!-- form-layout -->
+
+
+
+
+    </div><!-- br-section-wrapper -->
+
+
+</div><!-- br-pagebody -->
+
+
+
+<div id="loadRemarkPopUp">
+
+</div>
+
+
+
+
+

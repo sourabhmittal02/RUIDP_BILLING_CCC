@@ -26,11 +26,13 @@ using IronSoftware;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.text.html.simpleparser;
+using ClosedXML;
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
 using IronXL.Styles;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
+using DocumentFormat.OpenXml.Office2016.Drawing.Charts;
+//using NPOI.SS.UserModel;
+//using NPOI.XSSF.UserModel;
 
 namespace ComplaintTracker.Controllers
 {
@@ -247,6 +249,112 @@ namespace ComplaintTracker.Controllers
 
             return View(modelDashboardHaresments);
         }
+        public ActionResult ReportPaymentData()
+        {
+            PaymentModes modelDashboardHaresments = new PaymentModes();
+            //modelDashboardHaresments.LstBillingZone = Repository.GetZoneList();
+            List<PaymentModes> modes = Repository.GetPaymentModes();
+            ViewBag.Modes=modes;
+
+            return View(modelDashboardHaresments);
+        }
+        [HttpPost]
+        public ActionResult ReportPaymentData(string payment_date, string PaymentMode)
+        {
+            DataTable records = Repository.GetPaymentForPrint(payment_date, PaymentMode);
+            string appDataPath = Server.MapPath("~/Templates");
+            string outputPath = appDataPath + "/Export2.xls";
+            string templatePath = appDataPath + "/template2.xlsx";
+
+            if (System.IO.File.Exists(outputPath))
+            {
+                System.IO.File.Delete(outputPath);
+            }
+            System.IO.File.Copy(templatePath, outputPath);
+            using (var workbook = new XLWorkbook(templatePath))
+            {
+                var sheet = workbook.Worksheet(1); // Get the first sheet
+
+                // Base style
+                var baseStyle = workbook.Style;
+                baseStyle.Font.FontSize = 8;
+                baseStyle.Fill.BackgroundColor = XLColor.White;
+
+                // Bold style with grey background
+                var boldStyle = workbook.Style;
+                boldStyle.Font.Bold = true;
+                boldStyle.Font.FontSize = 8;
+                boldStyle.Fill.BackgroundColor = XLColor.LightGray;
+
+                // Bordered style
+                var borderedStyle = workbook.Style;
+                borderedStyle.Border.TopBorder = XLBorderStyleValues.Thin;
+                borderedStyle.Border.BottomBorder = XLBorderStyleValues.Thin;
+                borderedStyle.Border.LeftBorder = XLBorderStyleValues.Thin;
+                borderedStyle.Border.RightBorder = XLBorderStyleValues.Thin;
+                borderedStyle.Font.FontSize = 8;
+
+                // Write static data
+                sheet.Cell(4, 1).Value = "रोकड़ तिथि: " + payment_date; // Row 4, Column A
+                sheet.Cell(4, 4).Value = "भुगतान विधि: " + PaymentMode; // Row 4, Column D
+
+                int startRow = 6; // Start writing data from row 6
+
+                for (int row = 0; row < records.Rows.Count; row++)
+                {
+                    var excelRow = sheet.Row(startRow + row);
+                    bool isBoldRow = false;
+
+                    for (int col = 0; col < 5; col++) // Assuming 5 columns
+                    {
+                        var cell = excelRow.Cell(col + 1); // Columns are 1-indexed
+                        object value = records.Rows[row][col];
+
+                        if (value is DateTime dateValue)
+                        {
+                            // Format date as 'dd-MM-yyyy'
+                            cell.Value = dateValue.ToString("dd-MM-yyyy");
+                        }
+                        else if (double.TryParse(value?.ToString(), out double numericValue) && col != 0)
+                        {
+                            // Format numeric values with 2 decimal places
+                            cell.Value = numericValue.ToString("F2");
+                        }
+                        //else if (value?.ToString() == "Total")
+                        //{
+                        //    cell.Value = ""; // Leave cell empty for "Total" row
+                        //    isBoldRow = true;
+                        //}
+                        else
+                        {
+                            cell.Value = value?.ToString() ?? string.Empty;
+                        }
+
+                        // Apply bordered style
+                        cell.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                        cell.Style.Border.OutsideBorderColor = XLColor.Black;
+                        cell.Style.Font.FontSize = 8;
+                    }
+
+                    // Apply bold style with grey background for "Total" row
+                }
+
+                // Auto-size columns
+                for (int col = 1; col <= 5; col++)
+                {
+                    sheet.Column(col).AdjustToContents();
+                }
+
+                // Save to memory stream and return as a file
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    string fileName = "Export.xlsx";
+                    string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    return File(stream.ToArray(), contentType, fileName);
+                }
+            }
+        }
         //[HttpGet]
         //public ActionResult GetList(string strchokdiId, string strbinderNo, string strbm, string strby)
         //{
@@ -273,103 +381,195 @@ namespace ComplaintTracker.Controllers
                 System.IO.File.Delete(outputPath);
             }
             System.IO.File.Copy(templatePath, outputPath);
-            //=======================================
-            using (FileStream fs = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
+            using (var workbook = new XLWorkbook(templatePath))
             {
-                IWorkbook workbook = new XSSFWorkbook(fs);
-                ISheet sheet = workbook.GetSheetAt(0); // Get the first sheet (or specify by name)
-                NPOI.SS.UserModel.IFont baseFont = workbook.CreateFont();
-                baseFont.FontHeightInPoints = 8;
+                var sheet = workbook.Worksheet(1); // Get the first sheet
 
-                // Create a bold font style
-                NPOI.SS.UserModel.IFont boldFont = workbook.CreateFont();
-                boldFont.IsBold = true;
-                boldFont.FontHeightInPoints = 8;
+                // Define base and bold styles
+                var baseStyle = workbook.Style;
+                baseStyle.Font.FontSize = 8;
+                baseStyle.Fill.BackgroundColor = XLColor.White;
+                baseStyle.Font.Bold = false;
 
-                // Create a bold cell style with a grey background
-                ICellStyle boldStyleWithGreyBackground = workbook.CreateCellStyle();
-                boldStyleWithGreyBackground.SetFont(boldFont);
-                boldStyleWithGreyBackground.FillForegroundColor = NPOI.SS.UserModel.IndexedColors.Grey25Percent.Index;
-                boldStyleWithGreyBackground.FillPattern = NPOI.SS.UserModel.FillPattern.SolidForeground;
+                var boldStyle = workbook.Style;
+                boldStyle.Font.Bold = true;
+                boldStyle.Font.FontSize = 8;
+                boldStyle.Fill.BackgroundColor = XLColor.LightGray;
 
-                // Create a cell style with borders
-                ICellStyle borderedStyle = workbook.CreateCellStyle();
-                borderedStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
-                borderedStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
-                borderedStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
-                borderedStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
-                borderedStyle.SetFont(baseFont);
+                var borderedStyle = workbook.Style;
+                borderedStyle.Border.TopBorder = XLBorderStyleValues.Thin;
+                borderedStyle.Border.BottomBorder = XLBorderStyleValues.Thin;
+                borderedStyle.Border.LeftBorder = XLBorderStyleValues.Thin;
+                borderedStyle.Border.RightBorder = XLBorderStyleValues.Thin;
+                borderedStyle.Font.FontSize = 8;
 
-                // Start writing data from a specific row (e.g., row 2 to leave room for headers)
-                int startRow = 6; // Adjust based on your template
-                IRow excelRow1 = sheet.GetRow(2) ?? sheet.CreateRow(2);  // Row 3 (index 2)
-                ICell cell1 = excelRow1.GetCell(0) ?? excelRow1.CreateCell(0);  // Column A (index 0)
-                                                                                // Construct the text value
-                object value1 = "बिल माह " + Bill_Month + "-" + Bill_Year;
-                // Set the cell value
-                cell1.SetCellValue(value1?.ToString() ?? string.Empty);
-                IRow excelRow2 = sheet.GetRow(3) ?? sheet.CreateRow(3);  // Row 3 (index 2)
-                ICell cell2 = excelRow2.GetCell(0) ?? excelRow2.CreateCell(0);  // Column A (index 0)
-                value1 = "Chokdi No.: " + choki_No;
-                cell2.SetCellValue(value1?.ToString() ?? string.Empty);
+                // Write static data
+                sheet.Cell(3, 1).Value = "बिल माह " + Bill_Month + "-" + Bill_Year; // Row 3, Column A
+                sheet.Cell(4, 1).Value = "Chokdi No.: " + choki_No; // Row 4, Column A
+
+                int startRow = 7; // Start writing data from row 6
 
                 for (int row = 0; row < records.Rows.Count; row++)
                 {
-                    IRow excelRow = sheet.GetRow(startRow + row) ?? sheet.CreateRow(startRow + row);
+                    var excelRow = sheet.Row(startRow + row);
                     bool isBoldRow = false;
-                    //for (int col = 0; col < records.Columns.Count; col++)
-                    for (int col = 0; col < 23; col++)
+
+                    for (int col = 0; col < 23; col++) // Assuming 23 columns
                     {
-                        ICell cell = excelRow.GetCell(col) ?? excelRow.CreateCell(col);
+                        var cell = excelRow.Cell(col + 1); // Columns are 1-indexed
                         object value = records.Rows[row][col];
-                        if (value != null && DateTime.TryParse(value.ToString(), out DateTime dateValue))
+
+                        if (value is DateTime dateValue)
                         {
-                            // If the value is a date, format it as 'dd-MM-yyyy'
-                            value = dateValue.ToString("dd-MM-yyyy");
+                            // Format date as 'dd-MM-yyyy'
+                            cell.Value = dateValue.ToString("dd-MM-yyyy");
                         }
-                        else if (value != null && double.TryParse(value.ToString(), out double numericValue))
+                        else if (double.TryParse(value?.ToString(), out double numericValue) &&
+                                 col != 2 && col != 4 && col != 19)
                         {
-                            if (col != 2 && col != 4 && col != 19)
-                                value = numericValue.ToString("F2");
+                            // Format numeric values with 2 decimal places
+                            cell.Value = numericValue.ToString("F2");
                         }
-                        else if (value != null && value.ToString() == "Total")
+                        else if (value?.ToString() == "Total")
                         {
-                            value = "";
+                            cell.Value = ""; // Leave cell empty for "Total" row
                             isBoldRow = true;
                         }
-                        cell.SetCellValue(value?.ToString() ?? string.Empty);
-                        cell.CellStyle = borderedStyle;
+                        else
+                        {
+                            cell.Value = value?.ToString() ?? string.Empty;
+                        }
+
+                        // Apply bordered style
+                        cell.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                        cell.Style.Border.OutsideBorderColor = XLColor.Black;
+                        cell.Style.Font.FontSize = 8;
                     }
-                    // If the row is marked as bold, apply the bold style to all cells in the row
+
+                    // Apply bold style with grey background for "Total" row
                     if (isBoldRow)
                     {
                         for (int col = 0; col < 23; col++)
                         {
-                            ICell cell = excelRow.GetCell(col);
-                            ICellStyle boldBorderedGreyStyle = workbook.CreateCellStyle();
-                            boldBorderedGreyStyle.CloneStyleFrom(borderedStyle); // Copy border style
-                            boldBorderedGreyStyle.SetFont(boldFont); // Set the bold font
-                            boldBorderedGreyStyle.FillForegroundColor = NPOI.SS.UserModel.IndexedColors.Grey25Percent.Index; // Set background color
-                            boldBorderedGreyStyle.FillPattern = NPOI.SS.UserModel.FillPattern.SolidForeground; // Set fill pattern
-                            cell.CellStyle = boldBorderedGreyStyle;
+                            var cell = excelRow.Cell(col + 1);
+                            cell.Style.Font.SetBold(true); // Set bold
+                            cell.Style.Fill.SetBackgroundColor(XLColor.LightGray);
                         }
                     }
                 }
-                // Auto-size each column based on its content
-                for (int col = 0; col < 23; col++)
+
+                // Auto-size columns
+                for (int col = 1; col <= 23; col++)
                 {
-                    sheet.AutoSizeColumn(col);
+                    sheet.Column(col).AdjustToContents();
                 }
 
-                // Save the updated Excel file to a memory stream
+                // Save to memory stream and return as a file
                 using (var stream = new MemoryStream())
                 {
-                    workbook.Write(stream);
+                    workbook.SaveAs(stream);
                     string fileName = "Export.xlsx";
                     string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                     return File(stream.ToArray(), contentType, fileName);
                 }
             }
+            //=======================================
+            //using (FileStream fs = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
+            //{
+            //    IWorkbook workbook = new XSSFWorkbook(fs);
+            //    ISheet sheet = workbook.GetSheetAt(0); // Get the first sheet (or specify by name)
+            //    NPOI.SS.UserModel.IFont baseFont = workbook.CreateFont();
+            //    baseFont.FontHeightInPoints = 8;
+
+            //    // Create a bold font style
+            //    NPOI.SS.UserModel.IFont boldFont = workbook.CreateFont();
+            //    boldFont.IsBold = true;
+            //    boldFont.FontHeightInPoints = 8;
+
+            //    // Create a bold cell style with a grey background
+            //    ICellStyle boldStyleWithGreyBackground = workbook.CreateCellStyle();
+            //    boldStyleWithGreyBackground.SetFont(boldFont);
+            //    boldStyleWithGreyBackground.FillForegroundColor = NPOI.SS.UserModel.IndexedColors.Grey25Percent.Index;
+            //    boldStyleWithGreyBackground.FillPattern = NPOI.SS.UserModel.FillPattern.SolidForeground;
+
+            //    // Create a cell style with borders
+            //    ICellStyle borderedStyle = workbook.CreateCellStyle();
+            //    borderedStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+            //    borderedStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
+            //    borderedStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
+            //    borderedStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+            //    borderedStyle.SetFont(baseFont);
+
+            //    // Start writing data from a specific row (e.g., row 2 to leave room for headers)
+            //    int startRow = 6; // Adjust based on your template
+            //    IRow excelRow1 = sheet.GetRow(2) ?? sheet.CreateRow(2);  // Row 3 (index 2)
+            //    ICell cell1 = excelRow1.GetCell(0) ?? excelRow1.CreateCell(0);  // Column A (index 0)
+            //                                                                    // Construct the text value
+            //    object value1 = "बिल माह " + Bill_Month + "-" + Bill_Year;
+            //    // Set the cell value
+            //    cell1.SetCellValue(value1?.ToString() ?? string.Empty);
+            //    IRow excelRow2 = sheet.GetRow(3) ?? sheet.CreateRow(3);  // Row 3 (index 2)
+            //    ICell cell2 = excelRow2.GetCell(0) ?? excelRow2.CreateCell(0);  // Column A (index 0)
+            //    value1 = "Chokdi No.: " + choki_No;
+            //    cell2.SetCellValue(value1?.ToString() ?? string.Empty);
+
+            //    for (int row = 0; row < records.Rows.Count; row++)
+            //    {
+            //        IRow excelRow = sheet.GetRow(startRow + row) ?? sheet.CreateRow(startRow + row);
+            //        bool isBoldRow = false;
+            //        //for (int col = 0; col < records.Columns.Count; col++)
+            //        for (int col = 0; col < 23; col++)
+            //        {
+            //            ICell cell = excelRow.GetCell(col) ?? excelRow.CreateCell(col);
+            //            object value = records.Rows[row][col];
+            //            if (value != null && DateTime.TryParse(value.ToString(), out DateTime dateValue))
+            //            {
+            //                // If the value is a date, format it as 'dd-MM-yyyy'
+            //                value = dateValue.ToString("dd-MM-yyyy");
+            //            }
+            //            else if (value != null && double.TryParse(value.ToString(), out double numericValue))
+            //            {
+            //                if (col != 2 && col != 4 && col != 19)
+            //                    value = numericValue.ToString("F2");
+            //            }
+            //            else if (value != null && value.ToString() == "Total")
+            //            {
+            //                value = "";
+            //                isBoldRow = true;
+            //            }
+            //            cell.SetCellValue(value?.ToString() ?? string.Empty);
+            //            cell.CellStyle = borderedStyle;
+            //        }
+            //        // If the row is marked as bold, apply the bold style to all cells in the row
+            //        if (isBoldRow)
+            //        {
+            //            for (int col = 0; col < 23; col++)
+            //            {
+            //                ICell cell = excelRow.GetCell(col);
+            //                ICellStyle boldBorderedGreyStyle = workbook.CreateCellStyle();
+            //                boldBorderedGreyStyle.CloneStyleFrom(borderedStyle); // Copy border style
+            //                boldBorderedGreyStyle.SetFont(boldFont); // Set the bold font
+            //                boldBorderedGreyStyle.FillForegroundColor = NPOI.SS.UserModel.IndexedColors.Grey25Percent.Index; // Set background color
+            //                boldBorderedGreyStyle.FillPattern = NPOI.SS.UserModel.FillPattern.SolidForeground; // Set fill pattern
+            //                cell.CellStyle = boldBorderedGreyStyle;
+            //            }
+            //        }
+            //    }
+            //    // Auto-size each column based on its content
+            //    for (int col = 0; col < 23; col++)
+            //    {
+            //        sheet.AutoSizeColumn(col);
+            //    }
+
+            //    // Save the updated Excel file to a memory stream
+            //    using (var stream = new MemoryStream())
+            //    {
+            //        workbook.Write(stream,false);
+            //        string fileName = "Export.xlsx";
+            //        string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            //        return File(stream.ToArray(), contentType, fileName);
+            //    }
+            //}
             //=======================================
 
         }

@@ -3018,6 +3018,8 @@ new SqlParameter("@Service_no",modelNewConnectionRUIDP.Service_no)
             return (obj);
         }
 
+        
+
         public static List<PaymentModes> GetPaymentModes()
         {
             List<PaymentModes> obj = new List<PaymentModes>();
@@ -3188,6 +3190,22 @@ new SqlParameter("@Service_no",modelNewConnectionRUIDP.Service_no)
             //Bind Complaint generic list using dataRow     
             DataTable dt = ds.Tables[0];
             
+            return (dt);
+        }
+
+        public static DataTable GetPaymentForPrint(string payment_date, string ID)
+        {
+            SqlParameter[] param ={
+                    //new SqlParameter("@Zone",strzoneId),
+                    // new SqlParameter("@DMA",strdmaId),
+                    new SqlParameter("@Date",payment_date),
+                      new SqlParameter("@PaymentMode",ID)
+                    };
+
+            DataSet ds = SqlHelper.ExecuteDataset(HelperClass.Connection, CommandType.StoredProcedure, "GetPayment", param);
+            //Bind Complaint generic list using dataRow     
+            DataTable dt = ds.Tables[0];
+
             return (dt);
         }
 
