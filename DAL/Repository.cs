@@ -3110,6 +3110,25 @@ new SqlParameter("@Service_no",modelNewConnectionRUIDP.Service_no)
             return (obj);
         }
 
+        public static List<ModelBinder> GetBinderNoByChokdiForLedger(string ChokdiId)
+        {
+            List<ModelBinder> obj = new List<ModelBinder>();
+            SqlParameter[] param = { new SqlParameter("@chokdi", ChokdiId) };
+
+            DataSet ds = SqlHelper.ExecuteDataset(HelperClass.Connection, CommandType.StoredProcedure, "GetChokdiBinderNoForLedger", param);
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                obj.Add(
+                    new ModelBinder
+                    {
+                        Id = Convert.ToString(dr["Binder_No"]),
+                        Name = Convert.ToString(dr["Binder_No"]),
+                    }
+                    );
+            }
+            return (obj);
+        }
+
         public static List<ModelBillingPrint> GetConsumerBillForPrint(string strchokdiId, string strbinderNo, string strbm, string strby)
         {
             ModelBillingPrint modelAdvice = new ModelBillingPrint();

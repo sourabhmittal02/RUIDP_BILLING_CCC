@@ -533,7 +533,6 @@ D:\Git\RUIDP_BILLING_CCC\bin\Microsoft.Extensions.Primitives.dll
 D:\Git\RUIDP_BILLING_CCC\bin\Microsoft.IO.RecyclableMemoryStream.dll
 D:\Git\RUIDP_BILLING_CCC\bin\Microsoft.Web.Infrastructure.dll
 D:\Git\RUIDP_BILLING_CCC\bin\Newtonsoft.Json.dll
-D:\Git\RUIDP_BILLING_CCC\bin\NPOI.Core.dll
 D:\Git\RUIDP_BILLING_CCC\bin\NPOI.OOXML.dll
 D:\Git\RUIDP_BILLING_CCC\bin\NPOI.OpenXml4Net.dll
 D:\Git\RUIDP_BILLING_CCC\bin\NPOI.OpenXmlFormats.dll
@@ -623,14 +622,10 @@ D:\Git\RUIDP_BILLING_CCC\bin\Microsoft.Extensions.Options.xml
 D:\Git\RUIDP_BILLING_CCC\bin\Microsoft.Extensions.Primitives.xml
 D:\Git\RUIDP_BILLING_CCC\bin\Microsoft.IO.RecyclableMemoryStream.xml
 D:\Git\RUIDP_BILLING_CCC\bin\Newtonsoft.Json.xml
-D:\Git\RUIDP_BILLING_CCC\bin\NPOI.Core.pdb
-D:\Git\RUIDP_BILLING_CCC\bin\NPOI.Core.xml
 D:\Git\RUIDP_BILLING_CCC\bin\NPOI.OOXML.pdb
 D:\Git\RUIDP_BILLING_CCC\bin\NPOI.OOXML.xml
 D:\Git\RUIDP_BILLING_CCC\bin\NPOI.OpenXml4Net.pdb
-D:\Git\RUIDP_BILLING_CCC\bin\NPOI.OpenXml4Net.xml
 D:\Git\RUIDP_BILLING_CCC\bin\NPOI.OpenXmlFormats.pdb
-D:\Git\RUIDP_BILLING_CCC\bin\NPOI.OpenXmlFormats.xml
 D:\Git\RUIDP_BILLING_CCC\bin\RBush.xml
 D:\Git\RUIDP_BILLING_CCC\bin\RestSharp.xml
 D:\Git\RUIDP_BILLING_CCC\bin\Serilog.xml
@@ -667,6 +662,10 @@ D:\Git\RUIDP_BILLING_CCC\bin\Antlr3.Runtime.pdb
 D:\Git\RUIDP_BILLING_CCC\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 D:\Git\RUIDP_BILLING_CCC\obj\Release\ComplaintTracker.csproj.AssemblyReference.cache
 D:\Git\RUIDP_BILLING_CCC\obj\Release\ComplaintTracker.csproj.CoreCompileInputs.cache
-D:\Git\RUIDP_BILLING_CCC\obj\Release\Complain.FA75814E.Up2Date
 D:\Git\RUIDP_BILLING_CCC\obj\Release\ComplaintTracker.dll
 D:\Git\RUIDP_BILLING_CCC\obj\Release\ComplaintTracker.pdb
+D:\git\RUIDP_BILLING_CCC\bin\NPOI.dll
+D:\git\RUIDP_BILLING_CCC\bin\NPOI.pdb
+D:\git\RUIDP_BILLING_CCC\bin\NPOI.xml
+D:\git\RUIDP_BILLING_CCC\bin\NPOI.OpenXmlFormats.dll.config
+D:\git\RUIDP_BILLING_CCC\obj\Release\ComplaintTracker.csproj.CopyComplete

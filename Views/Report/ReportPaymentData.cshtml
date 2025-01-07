@@ -215,7 +215,7 @@
                         </div>*@
                     <div class="col-lg-3">
                         <div class="form-group mg-b-10-force">
-                            <label class="form-control-label">Chokdi<span class="tx-danger">*</span></label>
+                            <label class="form-control-label">Payment Modes<span class="tx-danger">*</span></label>
                             @Html.DropDownListFor(x => Model.PaymentMode, new SelectList(ViewBag.Modes, "PaymentMode", "PaymentMode"), "Select Payment Mode", new { @class = "form-control select2", @id = "ddlPmode", @name = "ddlPmode" })
                         </div>
                     </div>
@@ -231,7 +231,7 @@
                     <!-- col-4 -->
                     <div class="col-lg-2">
                         <div class="form-group mg-b-10-force">
-                            <label class="form-control-label">Binder<span class="tx-danger">*</span></label>
+                            <label class="form-control-label">Payment Date<span class="tx-danger">*</span></label>
                             <input type="date" name="payment_date" />
                         </div>
                     </div>

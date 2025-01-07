@@ -939,6 +939,15 @@ namespace ComplaintTracker.Controllers
 
             return Json(lstBinder, JsonRequestBehavior.AllowGet);
         }
+        [HttpGet]
+        public ActionResult GetBinderNoByChokdiForLedger(string ChokdiId)
+        {
+            List<ModelBinder> lstBinder = new List<ModelBinder>();
+
+            lstBinder = Repository.GetBinderNoByChokdiForLedger(ChokdiId);
+
+            return Json(lstBinder, JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult ExportPdf()
         {

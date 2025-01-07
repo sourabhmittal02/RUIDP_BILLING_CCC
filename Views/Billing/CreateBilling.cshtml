@@ -69,6 +69,14 @@
                     async: "true",
                     cache: "false",
                     success: function (data) {
+                        //console.log(data.billingHistories[0]);
+                        $('#lblkno').val(data.billingHistories[0].Kno);
+                        $('#lblMeterno').val(data.billingHistories[0].Service_Status);
+                        var fullDateTime = data.billingHistories[0].Last_Reading_Date;
+                        var dateOnly = fullDateTime.split(' ')[0]; // Extract the date part
+                        $('#lblprd').val(dateOnly);
+                        $('#lblpr').val(data.billingHistories[0].Last_Reading);
+                        $('input[name="Current_Reading"]').focus();
                         /*                          alert(data.complaintHistories[0].Kno)*/
                         $('#comp').DataTable(
                             {
@@ -110,6 +118,13 @@
                 $("#Kno").val($("#lblkno").val());
                 $("#BIll_Month").val($("#bm").val());
                 $("#BIll_Year").val($("#by").val());
+                $('#lblkno').val();
+                $('#lblMeterno').val();
+                $('#lblprd').val();
+                $('#lblpr').val();
+                var table = $('#comp').DataTable(); 
+                table.clear().draw();
+                $('#txtsearchKno').focus();
             });
 
         });
@@ -148,7 +163,14 @@
         else {
             debugger;
             $('#submitComplaint').prop('disabled', true);
-            swal("Good job!", msg, "success");
+            //swal("Good job!", msg, "success");
+            swal({
+                title: "Good job!",
+                text: msg,
+                icon: "success",
+            }, function () {
+                $('#txtsearchKno').prop('disabled', false).focus();
+            });
         }
     </script>
 }
@@ -284,14 +306,14 @@
 
                         <div class="col-lg-3">
                             <div class="form-group mg-b-10-force">
-                                <label class="form-control-label">Current reading<span class="tx-danger">*</span></label>
-                                @Html.EditorFor(model => model.Current_Reading, new { htmlAttributes = new { @class = "form-control", @placeholder = "", @required = true } })
+                                <label class="form-control-label">Current Reading date<span class="tx-danger">*</span></label>
+                                @Html.EditorFor(model => model.Current_Reading_Date, string.Format("{0:yyyy-MM-dd}", fromDate), new { htmlAttributes = new { @class = "form-control", @type = "date", @required = true } })
                             </div>
                         </div><!-- col-3 -->
                         <div class="col-lg-3">
                             <div class="form-group mg-b-10-force">
-                                <label class="form-control-label">Current Reading date<span class="tx-danger">*</span></label>
-                                @Html.EditorFor(model => model.Current_Reading_Date, string.Format("{0:yyyy-MM-dd}", fromDate), new { htmlAttributes = new { @class = "form-control", @type = "date", @required = true } })
+                                <label class="form-control-label">Current reading<span class="tx-danger">*</span></label>
+                                @Html.EditorFor(model => model.Current_Reading, new { htmlAttributes = new { @class = "form-control", @placeholder = "", @required = true } })
                             </div>
                         </div><!-- col-3 -->
                     </div>

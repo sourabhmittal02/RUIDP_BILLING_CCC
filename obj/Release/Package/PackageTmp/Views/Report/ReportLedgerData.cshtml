@@ -130,7 +130,7 @@
         function fillBinderNoByChokdi(selChokdiId) {
             $.ajax({
                 type: "GET",
-                url: '/Report/GetBinderNoByChokdi',
+                url: '/Report/GetBinderNoByChokdiForLedger',
                 data: { ChokdiId: selChokdiId },
                 contentType: "application/json;charset=utf-8",
                 success: function (data) {
