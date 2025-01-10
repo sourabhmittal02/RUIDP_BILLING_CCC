@@ -22,9 +22,11 @@
     if (tempdataval != null && tempdataval != '') {
         var bm = '@TempData["Bm"]';
          var by = '@TempData["By"]';
+         var msc = '@TempData["msc"]';
         $('#Current_Reading').val('0');
         $('#bm').val(bm);
         $('#by').val(by);
+        $('#msc').val(msc);
     }
 
 
@@ -53,6 +55,9 @@
                 selectOnClose: true,
             });
             $('#by').select2({
+                selectOnClose: true,
+            });
+            $('#msc').select2({
                 selectOnClose: true,
             });
 
@@ -118,11 +123,12 @@
                 $("#Kno").val($("#lblkno").val());
                 $("#BIll_Month").val($("#bm").val());
                 $("#BIll_Year").val($("#by").val());
+                $("#Meter_status_Code").val($("#msc").val());
                 $('#lblkno').val();
                 $('#lblMeterno').val();
                 $('#lblprd').val();
                 $('#lblpr').val();
-                var table = $('#comp').DataTable(); 
+                var table = $('#comp').DataTable();
                 table.clear().draw();
                 $('#txtsearchKno').focus();
             });
@@ -197,141 +203,153 @@
         <h6 class="tx-gray-800 tx-uppercase tx-bold tx-14 mg-b-10">Search Billing</h6>
         @*<p class="mg-b-30 tx-gray-600">A form with a label on top of each form control.</p>*@
 
-        <div class="form-layout form-layout-1">
-            <div class="row mg-b-25">
-                <div class="col-lg-4">
-                    <div class="form-group mg-b-10-force">
-                        <input id="txtsearchKno" name="searchKno" value="" type="number" placeholder="KNo." class="form-control searchtag" required />
-                    </div>
-                </div><!-- col-4 -->
+    <div class="form-layout form-layout-1">
+        <div class="row mg-b-25">
+            <div class="col-lg-4">
+                <div class="form-group mg-b-10-force">
+                    <input id="txtsearchKno" name="searchKno" value="" type="number" placeholder="KNo." class="form-control searchtag" required />
+                </div>
+            </div><!-- col-4 -->
 
-                <div class="col-lg-4">
-                    <div class="form-group mg-b-10-force">
-                        <button class="btn btn-info" id="btnSearch">Search</button>
-                    </div>
-                </div><!-- col-4 -->
+            <div class="col-lg-4">
+                <div class="form-group mg-b-10-force">
+                    <button class="btn btn-info" id="btnSearch">Search</button>
+                </div>
+            </div><!-- col-4 -->
+        </div>
+
+        @using (Html.BeginForm("CreateBilling", "Billing", FormMethod.Post, new { name = "frm", data_parsley_validate = "" }))
+        {
+            @*<h6 class="tx-gray-800 tx-uppercase tx-bold tx-14 mg-b-10">Previous Complaint History</h6>*@
+            <div class="form-layout form-layout-1">
+                <div class="row mg-b-25">
+                    <table id="comp" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Kno</th>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th>Last Reading</th>
+                                <th>Service Status</th>
+                                <th>Last Reading Date</th>
+                                <th>Binder No.</th>
+                                <th>Account No.</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
-
-            @using (Html.BeginForm("CreateBilling", "Billing", FormMethod.Post, new { name = "frm", data_parsley_validate = "" }))
-            {
-                @*<h6 class="tx-gray-800 tx-uppercase tx-bold tx-14 mg-b-10">Previous Complaint History</h6>*@
-                <div class="form-layout form-layout-1">
-                    <div class="row mg-b-25">
-                        <table id="comp" class="table table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Kno</th>
-                                    <th>Name</th>
-                                    <th>Address</th>
-                                    <th>Last Reading</th>
-                                    <th>Service Status</th>
-                                    <th>Last Reading Date</th>
-                                    <th>Binder No.</th>
-                                    <th>Account No.</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
+            <div class="form-layout form-layout-1 mg-t-10">
+                <div class="row mg-b-25">
+                    <div class="col-lg-3">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">#KNo.</label>
+                            <input class="form-control searchtag" id="lblkno" name="txtkno" type="text" value="" placeholder="" readonly="readonly" />
+                        </div>
+                    </div><!-- col-3 -->
+                    <div class="col-lg-3">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Service Status</label>
+                            <input class="form-control searchtag" id="lblMeterno" name="txtkno" type="text" value="" placeholder="" readonly="readonly" />
+                        </div>
+                    </div><!-- col-3 -->
+                    <div class="col-lg-3">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Last reading Date</label>
+                            <input class="form-control searchtag" id="lblprd" name="txtkno" type="text" value="" placeholder="" readonly="readonly" />
+                        </div>
+                    </div><!-- col-3 -->
+                    <div class="col-lg-3">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Last reading</label>
+                            <input class="form-control searchtag" id="lblpr" name="txtkno" type="text" value="" placeholder="" readonly="readonly" />
+                        </div>
+                    </div><!-- col-3 -->
                 </div>
-                <div class="form-layout form-layout-1 mg-t-10">
-                    <div class="row mg-b-25">
-                        <div class="col-lg-3">
-                            <div class="form-group mg-b-10-force">
-                                <label class="form-control-label">#KNo.</label>
-                                <input class="form-control searchtag" id="lblkno" name="txtkno" type="text" value="" placeholder="" readonly="readonly" />
-                            </div>
-                        </div><!-- col-3 -->
-                        <div class="col-lg-3">
-                            <div class="form-group mg-b-10-force">
-                                <label class="form-control-label">Service Status</label>
-                                <input class="form-control searchtag" id="lblMeterno" name="txtkno" type="text" value="" placeholder="" readonly="readonly" />
-                            </div>
-                        </div><!-- col-3 -->
-                        <div class="col-lg-3">
-                            <div class="form-group mg-b-10-force">
-                                <label class="form-control-label">Last reading Date</label>
-                                <input class="form-control searchtag" id="lblprd" name="txtkno" type="text" value="" placeholder="" readonly="readonly" />
-                            </div>
-                        </div><!-- col-3 -->
-                        <div class="col-lg-3">
-                            <div class="form-group mg-b-10-force">
-                                <label class="form-control-label">Last reading</label>
-                                <input class="form-control searchtag" id="lblpr" name="txtkno" type="text" value="" placeholder="" readonly="readonly" />
-                            </div>
-                        </div><!-- col-3 -->
-                    </div>
 
+            </div>
+            <div class="form-layout form-layout-1 mg-t-10" id="dco">
+                <div class="row mg-b-25">
+                    <div class="col-lg-3">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Bill Month <span class="tx-danger">*</span></label>
+                            @Html.DropDownList("ddlBM", new List<SelectListItem>
+                                {
+                                new SelectListItem{ Text="Jan", Value = "1" },
+                                new SelectListItem{ Text="Feb", Value = "2" },
+                                new SelectListItem{ Text="Mar", Value = "3" },
+                                new SelectListItem{ Text="Apr", Value = "4" },
+                                new SelectListItem{ Text="May", Value = "5" },
+                                new SelectListItem{ Text="Jun", Value = "6" },
+                                new SelectListItem{ Text="Jul", Value = "7" },
+                                new SelectListItem{ Text="aug", Value = "8" },
+                                new SelectListItem{ Text="Sept", Value = "9" },
+                                new SelectListItem{ Text="Oct", Value = "10" },
+                                new SelectListItem{ Text="Nov", Value = "11" },
+                                new SelectListItem{ Text="Dec", Value = "12" },
+                                }, new { @class = "form-control select2", id = "bm", @required = true })
+                        </div>
+                    </div><!-- col-4 -->
+
+                    <div class="col-lg-3">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Bill Year <span class="tx-danger">*</span></label>
+                            @Html.DropDownList("ddlBY", new List<SelectListItem>
+                                {
+                                new SelectListItem{ Text="2024", Value = "2024" },
+                                new SelectListItem{ Text="2025", Value = "2025" },
+                                new SelectListItem{ Text="2026", Value = "2026" },
+                                new SelectListItem{ Text="2027", Value = "2027" },
+                                new SelectListItem{ Text="2028", Value = "2028" },
+                                new SelectListItem{ Text="2029", Value = "2029" },
+                                new SelectListItem{ Text="2030", Value = "2030" },
+                                new SelectListItem{ Text="2031", Value = "2031" },
+                                new SelectListItem{ Text="2032", Value = "2032" },
+                                new SelectListItem{ Text="2033", Value = "2033" },
+                                }, new { @class = "form-control select2", id = "by", @required = true })
+                        </div>
+                    </div><!-- col-4 -->
+                    <div class="col-lg-3">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Meter Status Code <span class="tx-danger">*</span></label>
+                            @Html.DropDownList("ddlmsc", new List<SelectListItem>
+                                {
+                                new SelectListItem{ Text="OK", Value = "OK" },
+                                new SelectListItem{ Text="Lock", Value = "L" },
+                                new SelectListItem{ Text="Burnt", Value = "B" },
+                                new SelectListItem{ Text="Theft", Value = "T" },
+                                }, new { @class = "form-control select2", id = "msc", @required = true })
+                        </div>
+                    </div><
+                    <div class="col-lg-3">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Current Reading date<span class="tx-danger">*</span></label>
+                            @Html.EditorFor(model => model.Current_Reading_Date, string.Format("{0:yyyy-MM-dd}", fromDate), new { htmlAttributes = new { @class = "form-control", @type = "date", @required = true } })
+                        </div>
+                    </div><!-- col-3 -->
+                    <div class="col-lg-3">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Current reading<span class="tx-danger">*</span></label>
+                            @Html.EditorFor(model => model.Current_Reading, new { htmlAttributes = new { @class = "form-control", @placeholder = "", @required = true } })
+                        </div>
+                    </div><!-- col-3 -->
                 </div>
-                <div class="form-layout form-layout-1 mg-t-10" id="dco">
-                    <div class="row mg-b-25">
-                        <div class="col-lg-3">
-                            <div class="form-group mg-b-10-force">
-                                <label class="form-control-label">Bill Month <span class="tx-danger">*</span></label>
-                                @Html.DropDownList("ddlBM", new List<SelectListItem>
-                                    {
-                                    new SelectListItem{ Text="Jan", Value = "1" },
-                                    new SelectListItem{ Text="Feb", Value = "2" },
-                                    new SelectListItem{ Text="Mar", Value = "3" },
-                                    new SelectListItem{ Text="Apr", Value = "4" },
-                                    new SelectListItem{ Text="May", Value = "5" },
-                                    new SelectListItem{ Text="Jun", Value = "6" },
-                                    new SelectListItem{ Text="Jul", Value = "7" },
-                                    new SelectListItem{ Text="aug", Value = "8" },
-                                    new SelectListItem{ Text="Sept", Value = "9" },
-                                    new SelectListItem{ Text="Oct", Value = "10" },
-                                    new SelectListItem{ Text="Nov", Value = "11" },
-                                    new SelectListItem{ Text="Dec", Value = "12" },
-                                    }, new { @class = "form-control select2", id = "bm", @required = true })
-                            </div>
-                        </div><!-- col-4 -->
-
-                        <div class="col-lg-3">
-                            <div class="form-group mg-b-10-force">
-                                <label class="form-control-label">Bill Year <span class="tx-danger">*</span></label>
-                                @Html.DropDownList("ddlBY", new List<SelectListItem>
-                                    {
-                                    new SelectListItem{ Text="2024", Value = "2024" },
-                                    new SelectListItem{ Text="2025", Value = "2025" },
-                                    new SelectListItem{ Text="2026", Value = "2026" },
-                                    new SelectListItem{ Text="2027", Value = "2027" },
-                                    new SelectListItem{ Text="2028", Value = "2028" },
-                                    new SelectListItem{ Text="2029", Value = "2029" },
-                                    new SelectListItem{ Text="2030", Value = "2030" },
-                                    new SelectListItem{ Text="2031", Value = "2031" },
-                                    new SelectListItem{ Text="2032", Value = "2032" },
-                                    new SelectListItem{ Text="2033", Value = "2033" },
-                                    }, new { @class = "form-control select2", id = "by", @required = true })
-                            </div>
-                        </div><!-- col-4 -->
-
-                        <div class="col-lg-3">
-                            <div class="form-group mg-b-10-force">
-                                <label class="form-control-label">Current Reading date<span class="tx-danger">*</span></label>
-                                @Html.EditorFor(model => model.Current_Reading_Date, string.Format("{0:yyyy-MM-dd}", fromDate), new { htmlAttributes = new { @class = "form-control", @type = "date", @required = true } })
-                            </div>
-                        </div><!-- col-3 -->
-                        <div class="col-lg-3">
-                            <div class="form-group mg-b-10-force">
-                                <label class="form-control-label">Current reading<span class="tx-danger">*</span></label>
-                                @Html.EditorFor(model => model.Current_Reading, new { htmlAttributes = new { @class = "form-control", @placeholder = "", @required = true } })
-                            </div>
-                        </div><!-- col-3 -->
-                    </div>
-                    <div class="row mg-b-10">
-                        <div class="col-lg-2">
-                            <div class="form-group mg-b-10-force">
-                                <input type="submit" value="Save" class="btn btn-primary btn-block" id="submitComplaint" onclick="return stopMultipleSubmit();" />
-                            </div>
+                <div class="row mg-b-10">
+                    <div class="col-lg-2">
+                        <div class="form-group mg-b-10-force">
+                            <input type="submit" value="Save" class="btn btn-primary btn-block" id="submitComplaint" onclick="return stopMultipleSubmit();" />
                         </div>
                     </div>
-                </div><!-- form-layout -->
+                </div>
+            </div><!-- form-layout -->
 
-                @Html.HiddenFor(model => model.Kno)
-                @Html.HiddenFor(model => model.BIll_Month)
-                @Html.HiddenFor(model => model.BIll_Year)
+            @Html.HiddenFor(model => model.Kno)
+            @Html.HiddenFor(model => model.BIll_Month)
+            @Html.HiddenFor(model => model.BIll_Year)
+            @Html.HiddenFor(model => model.Meter_status_Code)
 
-            }
-        </div>
+        }
+    </div>
 
 
         <div class="row mg-b-25">

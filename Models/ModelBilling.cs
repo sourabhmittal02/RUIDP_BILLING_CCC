@@ -30,6 +30,7 @@ namespace ComplaintTracker.Models
         public string Binder_No { get; set; }
         public string Account_No { get; set; }
 
+        public string Meter_status_Code { get; set; }
 
         [Required(ErrorMessage = "The Current Reading Date must be submitted")]
         public DateTime Current_Reading_Date { get; set; }

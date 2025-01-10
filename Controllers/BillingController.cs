@@ -55,6 +55,7 @@ namespace ComplaintTracker.Controllers
                     TempData["Bm"] = modelBilling.BIll_Month;
                     TempData["By"] = modelBilling.BIll_Year;
 
+                    TempData["msc"] = modelBilling.Meter_status_Code;
 
                     return View(modelBilling);
                     //return RedirectToAction("CreateBilling", data);
