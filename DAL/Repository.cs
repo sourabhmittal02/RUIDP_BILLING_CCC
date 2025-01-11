@@ -3229,6 +3229,164 @@ new SqlParameter("@Service_no",modelNewConnectionRUIDP.Service_no)
         }
 
         #endregion
+
+        #region CAT
+        public static List<CAT> GetConsumberDetailForCAT(string kno)
+        {
+            SqlParameter[] param ={new SqlParameter("@kno",kno)};
+            DataSet ds = SqlHelper.ExecuteDataset(HelperClass.Connection, CommandType.StoredProcedure, "GetConsumerDetailForCAT", param);
+            List<CAT> lst = new List<CAT>();
+            CAT _cat=new CAT();
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                _cat = new CAT();
+                _cat.KNO= dr.ItemArray[0].ToString();
+                _cat.Name= dr.ItemArray[1].ToString();
+                _cat.Address= dr.ItemArray[2].ToString();
+                _cat.MobileNo= dr.ItemArray[3].ToString();
+                _cat.Binder_No= dr.ItemArray[4].ToString();
+                _cat.AccountNo= dr.ItemArray[5].ToString();
+                _cat.Service_Status= dr.ItemArray[6].ToString();
+                lst.Add(_cat);
+            }
+            return lst;
+        }
+        public static List<PaymentDetail> GetPaymentDetail(string kno)
+        {
+            SqlParameter[] param = { new SqlParameter("@kno", kno) };
+            DataSet ds = SqlHelper.ExecuteDataset(HelperClass.Connection, CommandType.StoredProcedure, "GetConsumerPaymentDetailForCAT", param);
+            PaymentDetail detail = new PaymentDetail();
+            List<PaymentDetail> lst = new List<PaymentDetail>();
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                detail = new PaymentDetail();
+                detail.Kno= dr.ItemArray[0].ToString();
+                detail.Payment_Date =dr.ItemArray[1].ToString();
+                detail.Paid_Amount =Convert.ToDouble(dr.ItemArray[2].ToString());
+                detail.TRANSACTION_NO =dr.ItemArray[3].ToString();
+                lst.Add(detail);
+            }
+            return lst;
+        }
+        public static List<MeterDetail> GetMeterDetail(string kno)
+        {
+            SqlParameter[] param = { new SqlParameter("@kno", kno) };
+            DataSet ds = SqlHelper.ExecuteDataset(HelperClass.Connection, CommandType.StoredProcedure, "Meter_Detail_CAT", param);
+            MeterDetail detail = new MeterDetail();
+            List<MeterDetail> lst = new List<MeterDetail>();
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                detail = new MeterDetail();
+                detail.KNO= dr.ItemArray[0].ToString();
+                detail.MeterNo=dr.ItemArray[1].ToString();
+                detail.MeterInstallDate =dr.ItemArray[2].ToString();
+                detail.Active =dr.ItemArray[3].ToString();
+                lst.Add(detail);
+            }
+            return lst;
+        }
+        public static List<AdviceDetail> GetAdviceDetail(string kno)
+        {
+            SqlParameter[] param = { new SqlParameter("@kno", kno) };
+            DataSet ds = SqlHelper.ExecuteDataset(HelperClass.Connection, CommandType.StoredProcedure, "Advice_Detail_CAT", param);
+            AdviceDetail detail = new AdviceDetail();
+            List<AdviceDetail> lst = new List<AdviceDetail>();
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                detail = new AdviceDetail();
+                detail.KNO= dr.ItemArray[0].ToString();
+                detail.OrderType=dr.ItemArray[1].ToString();
+                detail.OrderDate=dr.ItemArray[2].ToString();
+                detail.Status =dr.ItemArray[3].ToString();
+                detail.Amount =dr.ItemArray[4].ToString();
+                detail.ReceiptNo =dr.ItemArray[5].ToString();
+                detail.ReceiptDate =dr.ItemArray[6].ToString();
+                detail.MeterNo =dr.ItemArray[7].ToString();
+                detail.TransactionType =dr.ItemArray[8].ToString();
+                detail.PrevReadingDate =dr.ItemArray[9].ToString();
+                detail.CurrReadingDate =dr.ItemArray[10].ToString();
+                detail.PrevReading =dr.ItemArray[11].ToString();
+                detail.CurrReading =dr.ItemArray[12].ToString();
+                lst.Add(detail);
+            }
+            return lst;
+        }
+        public static List<ConsumptionDetail> GetConsumeDetail(string kno)
+        {
+            SqlParameter[] param = { new SqlParameter("@kno", kno) };
+            DataSet ds = SqlHelper.ExecuteDataset(HelperClass.Connection, CommandType.StoredProcedure, "Consumption_Detail_CAT", param);
+            ConsumptionDetail detail = new ConsumptionDetail();
+            List<ConsumptionDetail> lst = new List<ConsumptionDetail>();
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                detail = new ConsumptionDetail();
+                detail.KNO= dr.ItemArray[0].ToString();
+                detail.BillNo=dr.ItemArray[1].ToString();
+                detail.BillMonth=dr.ItemArray[2].ToString();
+                detail.BillYear =dr.ItemArray[3].ToString();
+                detail.MeterNo =dr.ItemArray[4].ToString();
+                detail.PrevReadingDate =dr.ItemArray[5].ToString();
+                detail.CurrReadingDate =dr.ItemArray[6].ToString();
+                detail.PrevReading =dr.ItemArray[7].ToString();
+                detail.CurrReading =dr.ItemArray[8].ToString();
+                detail.Consumption = dr.ItemArray[9].ToString();
+                lst.Add(detail);
+            }
+            return lst;
+        }
+        public static List<ModelBillingPrint> GetBillDetail(string kno)
+        {
+            SqlParameter[] param = { new SqlParameter("@kno", kno) };
+            DataSet ds = SqlHelper.ExecuteDataset(HelperClass.Connection, CommandType.StoredProcedure, "Bill_Detail_CAT", param);
+            List<ModelBillingPrint> lst = new List<ModelBillingPrint>();
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                ModelBillingPrint detail = new ModelBillingPrint();
+                detail.KNO = Convert.ToString(dr["KNO"]);
+                detail.Chokdi = Convert.ToString(dr["Chokdi"]);
+                detail.Name = Convert.ToString(dr["Name"]);
+                detail.Address = Convert.ToString(dr["Address"]);
+                detail.Account_No = Convert.ToString(dr["Account_No"]);
+                detail.Binder_No = Convert.ToString(dr["Binder_No"]);
+                detail.Office_Code = Convert.ToString(dr["Office_Code"]);
+                detail.Category = Convert.ToString(dr["Category"]);
+                detail.Meter_No = Convert.ToString(dr["Meter_No"]);
+                detail.Previous_Reading_Date = Convert.ToString(dr["Previous_Reading_Date"]);
+                detail.Bill_Month = Convert.ToString(dr["Bill_Month"]);
+                detail.Bill_Year = Convert.ToString(dr["Bill_Year"]);
+                detail.Current_Reading_Date = Convert.ToString(dr["Current_Reading_Date"]);
+                detail.Bill_Date = Convert.ToString(dr["Bill_Date"]);
+                detail.Due_Date_Cash = Convert.ToString(dr["Due_Date_Cash"]);
+                detail.Due_Date_Cheque = Convert.ToString(dr["Due_Date_Cheque"]);
+                detail.Current_Reading = Convert.ToString(dr["Current_Reading"]);
+                detail.Precious_Reading = Convert.ToString(dr["Precious_Reading"]);
+                detail.Net_Consumption = Convert.ToString(dr["Net_Consumption"]);
+                detail.Pending_Amount = Convert.ToString(dr["Pending_Amount"]);
+                detail.Service_No = Convert.ToString(dr["Service_No"]);
+                detail.Meter_Result = Convert.ToString(dr["Meter_Result"]);
+                detail.Adjusted_Consumption_Amount_Water = Convert.ToString(dr["Adjusted_Consumption_Amount_Water"]);
+                detail.Adjusted_Consumption_Amount_Sewerage = Convert.ToString(dr["Adjusted_Consumption_Amount_Sewerage"]);
+                detail.Pure_Consumption_Amount_Water = Convert.ToString(dr["Pure_Consumption_Amount_Water"]);
+                detail.Pure_Consumption_Amount_Sewerage = Convert.ToString(dr["Pure_Consumption_Amount_Sewerage"]);
+                detail.Excess_Sewerage = Convert.ToString(dr["Excess_Sewerage"]);
+                detail.Government_Rebate = Convert.ToString(dr["Government_Rebate"]);
+                detail.Water_Amount = Convert.ToString(dr["Water_Amount"]);
+                detail.Sewerage_Amount = Convert.ToString(dr["Sewerage_Amount"]);
+                detail.Meter_Service_Charge = Convert.ToString(dr["Meter_Service_Charge"]);
+                detail.Infrastructure_Development_Surcharge = Convert.ToString(dr["Infrastructure_Development_Surcharge"]);
+                detail.Fix_Charge = Convert.ToString(dr["Fix_Charge"]);
+                detail.Pending_Amount = Convert.ToString(dr["Pending_Amount"]);
+                detail.LPS = Convert.ToString(dr["LPS"]);
+                detail.Other = Convert.ToString(dr["Other"]);
+                detail.Interest = Convert.ToString(dr["Interest"]);
+                detail.Amount_On_Due_Date = Convert.ToString(dr["Amount_On_Due_Date"]);
+                detail.Amount_After_Due_Date = Convert.ToString(dr["Amount_After_Due_Date"]);
+                detail.Payment_Date = Convert.ToString(dr["Payment_Date"]);
+                lst.Add(detail);
+            }
+            return lst;
+        }
+        #endregion
     }
 }
 

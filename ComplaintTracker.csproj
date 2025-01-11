@@ -389,6 +389,7 @@
     <Compile Include="Controllers\BillingController.cs" />
     <Compile Include="Controllers\AdviceController.cs" />
     <Compile Include="Controllers\BillingInfoController.cs" />
+    <Compile Include="Controllers\CATController.cs" />
     <Compile Include="Controllers\ComplaintController.cs" />
     <Compile Include="Controllers\ComplaintReopenController.cs" />
     <Compile Include="Controllers\ExceptionController.cs" />
@@ -412,6 +413,7 @@
     <Compile Include="HelperClass.cs" />
     <Compile Include="JqueryDatatableParam.cs" />
     <Compile Include="Models\CallQueueWaitingModel.cs" />
+    <Compile Include="Models\CAT.cs" />
     <Compile Include="Models\DTModel.cs" />
     <Compile Include="Models\ModelBilling.cs" />
     <Compile Include="Models\ModelAgentLiveStatus.cs" />
@@ -452,6 +454,7 @@
     <Compile Include="Models\ModelComplaintType.cs" />
     <Compile Include="Models\ModelExceptionLogger.cs" />
     <Compile Include="Models\NewConnectionModel.cs" />
+    <Compile Include="Models\PaymentDetail.cs" />
     <Compile Include="Models\PaymentModeModel.cs" />
     <Compile Include="Models\PerformanceTrackerModel.cs" />
     <Compile Include="Models\Response.cs" />
@@ -1927,6 +1930,7 @@
     <Content Include="Views\NewConnecionRUIDP\Create.cshtml" />
     <Content Include="Views\Report\ReportLedgerData.cshtml" />
     <Content Include="Views\Report\ReportPaymentData.cshtml" />
+    <Content Include="Views\CAT\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

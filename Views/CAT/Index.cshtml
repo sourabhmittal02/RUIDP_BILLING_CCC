@@ -1,0 +1,361 @@
+﻿@model IEnumerable<ComplaintTracker.Models.CAT>
+@{
+    ViewBag.Title = "Index";
+}
+<div class="br-pageheader pd-y-15 pd-l-20">
+    <nav class="breadcrumb pd-0 mg-0 tx-12">
+        <a class="breadcrumb-item" href="~/Dashboard/Index">Home</a>
+        @*<a class="breadcrumb-item" href="#">Forms</a>*@
+    <span class="breadcrumb-item active">Consumer Analysis Tool</span>
+    </nav>
+</div><!-- br-pageheader -->
+<div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
+    <h4 class="tx-gray-800 mg-b-5">Consumer Analysis Tool</h4>
+    @*<p class="mg-b-0">Forms are used to collect user information with different element types of input, select, checkboxes, radios and more.</p>*@
+</div>
+<div class="br-pagebody">
+    <div id="loadRemarkPopUp">
+
+    </div>
+    <div class="br-section-wrapper">
+
+        <form method="post">
+            <div class="form-layout form-layout-1">
+                <div class="row ">
+                    <div class="col-lg-4">
+                        <div class="form-group mg-b-10-force">
+                            <label class="form-control-label">Enter K.No.<span class="tx-danger">*</span></label>
+                            <input type="text" class="form-control" name="kno" required />
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group mg-b-10-force">
+                            <input type="submit" name="submit" class="mt-4 btn btn-primary" value="Search" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        @{ if (Model != null)
+            {
+                <div class="form-layout form-layout-1">
+                    <table class="table table-responsive">
+                        <thead>
+                            <tr>
+                                <th>KNO</th>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th>Mobile No</th>
+                                <th>Binder No</th>
+                                <th>Account No</th>
+                                <th>Service Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.KNO</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Address</td>
+                                    <td>@item.MobileNo</td>
+                                    <td>@item.Binder_No</td>
+                                    <td>@item.AccountNo</td>
+                                    <td>@item.Service_Status</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            } }
+        <div class="form-layout form-layout-1">
+            <table id="PaymentTable" class="table table-responsive">
+                <thead>
+                    <tr><th colspan="4" style="border:1px solid #000; text-align:center">Payment Detail</th></tr>
+                    <tr>
+                        <th>Kno</th>
+                        <th>Payment Date</th>
+                        <th>Paid Amount</th>
+                        <th>Transaction No</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <table id="MeterTable" class="table table-responsive">
+                <thead>
+                    <tr><th colspan="4" style="border:1px solid #000; text-align:center">Meter Detail</th></tr>
+                    <tr>
+                        <th>Kno</th>
+                        <th>Meter NO</th>
+                        <th>Meter Install Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <table id="AdviceTable" class="table table-responsive">
+                <thead>
+                    <tr><th colspan="13" style="border:1px solid #000; text-align:center">Advice Detail</th></tr>
+                    <tr>
+                        <th>Kno</th>
+                        <th>Order Type</th>
+                        <th>Order Date</th>
+                        <th>Status</th>
+                        <th>Amount</th>
+                        <th>Receipt No</th>
+                        <th>Receipt Date</th>
+                        <th>Meter No</th>
+                        <th>Transaction Type</th>
+                        <th>Prev Reading Date</th>
+                        <th>Curr Reading Date</th>
+                        <th>Prev Reading</th>
+                        <th>Curr Reading</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <table id="ConsumeTable" class="table table-responsive">
+                <thead>
+                    <tr><th colspan="10" style="border:1px solid #000; text-align:center">Consumption Detail</th></tr>
+                    <tr>
+                        <th>Kno</th>
+                        <th>Bill No</th>
+                        <th>Bill Month</th>
+                        <th>Bill Year</th>
+                        <th>Meter No</th>
+                        <th>Prev Reading Date</th>
+                        <th>Curr Reading Date</th>
+                        <th>Prev Reading</th>
+                        <th>Curr Reading</th>
+                        <th>Consumeption</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="form-layout form-layout-1">
+            <div class="row">
+                <div class="col-2"><button class="btn btn-outline-primary" id="btnPayment" data-kno="@ViewBag.Kno">Payment Detail</button></div>
+                <div class="col-2">
+                    @using (Html.BeginForm("ReportBillingPrint", "CAT", FormMethod.Post, new { name = "frm", id = "validation-form" }))
+                    {
+                        <input type="hidden" value="@ViewBag.Kno" name="kno" />
+                        <button type="submit" class="btn btn-outline-primary" id="btnBill1" data-kno="@ViewBag.Kno">Current Bill</button>
+                    }
+                    </div>
+                <div class="col-2"><button class="btn btn-outline-primary" id="btnMeter" data-kno="@ViewBag.Kno">Meter Detail</button></div>
+                <div class="col-2"><button class="btn btn-outline-primary" id="btnAdvice" data-kno="@ViewBag.Kno">Advice Detail</button></div>
+                <div class="col-2"><button class="btn btn-outline-primary" id="btnConsume" data-kno="@ViewBag.Kno">Consumption Detail</button></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#PaymentTable').hide();
+        $('#MeterTable').hide();
+        $('#AdviceTable').hide();
+        $('#ConsumeTable').hide();
+    });
+    $('#btnPayment').click(function () {
+        var knoValue = $('#btnPayment').data('kno');
+        if (!knoValue) {
+            alert("Please Search KNO First");
+        } else {
+            $.ajax({
+                type: "GET",
+                url: '/CAT/GetPaymentDetail',
+                contentType: "application/json; charset=utf-8",
+                data: { "kno": knoValue },
+                datatype: "json",
+                success: function (data) {
+                    $('#PaymentTable tbody').empty();
+                    data.forEach(record => {
+                        $('#PaymentTable tbody').append(`
+                    <tr>
+                        <td>${record.Kno}</td>
+                        <td>${record.Payment_Date.split(' ')[0]}</td>
+                        <td>${record.Paid_Amount}</td>
+                        <td>${record.TRANSACTION_NO || 'N/A'}</td>
+                    </tr>
+                `);
+                    });
+                    $('#PaymentTable').show();
+                    $('#MeterTable').hide();
+                    $('#AdviceTable').hide();
+                    $('#ConsumeTable').hide();
+                },
+                error: function () {
+                    alert("error occured.");
+                }
+            });
+        }
+    });
+    $('#btnBill').click(function () {
+        var knoValue = $('#btnBill').data('kno');
+        if (!knoValue) {
+            alert("Please Search KNO First");
+        } else {
+            $.ajax({
+                type: "GET",
+                url: '/CAT/ReportBillingPrint',
+                contentType: "application/json; charset=utf-8",
+                data: { "kno": knoValue },
+                xhrFields: {
+                    responseType: 'blob' // Expecting a binary file (PDF)
+                },
+                success: function (data, status, xhr) {
+                    console.log(data);
+                    //// Create a blob from the response
+                    //var blob = new Blob([data], { type: 'application/pdf' });
+
+                    //// Generate a temporary URL for the blob
+                    //var url = window.URL.createObjectURL(blob);
+
+                    //// Create a temporary anchor element for download
+                    //var link = document.createElement('a');
+                    //link.href = url;
+                    //link.download = "Bill.pdf";
+
+                    //// Append the anchor to the body and trigger a click
+                    //document.body.appendChild(link);
+                    //link.click();
+
+                    //// Clean up after the download
+                    //setTimeout(function () {
+                    //    document.body.removeChild(link);
+                    //    window.URL.revokeObjectURL(url);
+                    //}, 100);
+                },
+                error: function (xhr, status, error) {
+                    alert('Failed to download file: ' + error);
+                }
+            });
+
+        }
+    });
+    $('#btnMeter').click(function () {
+        var knoValue = $('#btnMeter').data('kno');
+        if (!knoValue) {
+            alert("Please Search KNO First");
+        } else {
+            $.ajax({
+                type: "GET",
+                url: '/CAT/GetMeterDetail',
+                contentType: "application/json; charset=utf-8",
+                data: { "kno": knoValue },
+                datatype: "json",
+                success: function (data) {
+                    $('#MeterTable tbody').empty();
+                    data.forEach(record => {
+                        $('#MeterTable tbody').append(`
+                    <tr>
+                        <td>${record.KNO}</td>
+                        <td>${record.MeterNo}</td>
+                        <td>${record.MeterInstallDate.split(' ')[0]}</td>
+                        <td>${record.Active}</td>
+                    </tr>
+                `);
+                    });
+                    $('#MeterTable').show();
+                    $('#PaymentTable').hide();
+                    $('#AdviceTable').hide();
+                    $('#ConsumeTable').hide();
+                },
+                error: function () {
+                    alert("error occured.");
+                }
+            });
+        }
+    });
+    $('#btnAdvice').click(function () {
+        var knoValue = $('#btnAdvice').data('kno');
+        if (!knoValue) {
+            alert("Please Search KNO First");
+        } else {
+            $.ajax({
+                type: "GET",
+                url: '/CAT/GetAdviceDetail',
+                contentType: "application/json; charset=utf-8",
+                data: { "kno": knoValue },
+                datatype: "json",
+                success: function (data) {
+                    console.log(data);
+                    $('#AdviceTable tbody').empty();
+                    data.forEach(record => {
+                        $('#AdviceTable tbody').append(`
+                    <tr>
+                        <td>${record.KNO}</td>
+                        <td>${record.OrderType}</td>
+                        <td>${record.OrderDate.split(' ')[0]}</td>
+                        <td>${record.Status}</td>
+                        <td>${record.Amount}</td>
+                        <td>${record.ReceiptNo}</th>
+                        <td>${record.ReceiptDate.split(' ')[0]}</th>
+                        <td>${record.MeterNo}</th>
+                        <td>${record.TransactionType}</td>
+                        <td>${record.PrevReadingDate.split(' ')[0]}</td>
+                        <td>${record.CurrReadingDate.split(' ')[0]}</td>
+                        <td>${record.PrevReading}</td>
+                        <td>${record.CurrReading}</td>
+                     </tr>
+                `);
+                    });
+                    $('#AdviceTable').show();
+                    $('#MeterTable').hide();
+                    $('#PaymentTable').hide();
+                    $('#ConsumeTable').hide();
+                },
+                error: function () {
+                    alert("error occured.");
+                }
+            });
+        }
+    });
+    $('#btnConsume').click(function () {
+        var knoValue = $('#btnConsume').data('kno');
+        if (!knoValue) {
+            alert("Please Search KNO First");
+        } else {
+            $.ajax({
+                type: "GET",
+                url: '/CAT/GetConsumeDetail',
+                contentType: "application/json; charset=utf-8",
+                data: { "kno": knoValue },
+                datatype: "json",
+                success: function (data) {
+                    //console.log(data);
+                    $('#ConsumeTable tbody').empty();
+                    data.forEach(record => {
+                        $('#ConsumeTable tbody').append(`
+                    <tr>
+                        <td>${record.KNO}</td>
+                        <td>${record.BillNo}</td>
+                        <td>${record.BillMonth}</td>
+                        <td>${record.BillYear}</td>
+                        <td>${record.MeterNo}</th>
+                        <td>${record.PrevReadingDate.split(' ')[0]}</td>
+                        <td>${record.CurrReadingDate.split(' ')[0]}</td>
+                        <td>${record.PrevReading}</td>
+                        <td>${record.CurrReading}</td>
+                        <td>${record.Consumption}</td>
+                     </tr>
+                `);
+                    });
+                    $('#ConsumeTable').show();
+                    $('#AdviceTable').hide();
+                    $('#MeterTable').hide();
+                    $('#PaymentTable').hide();
+                },
+                error: function () {
+                    alert("error occured.");
+                }
+            });
+        }
+    });
+</script>
